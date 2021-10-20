@@ -1,0 +1,281 @@
+" Settings {{{
+
+set nocompatible
+
+" Use case insensitive search, except when using capital letters
+set ignorecase
+set smartcase
+
+" Instead of failing a command because of unsaved changes, instead raise a
+" dialogue asking if you wish to save changed files.
+set confirm
+
+" Enable use of the mouse for all modes
+set mouse=a
+
+" Display line numbers on the left
+set number relativenumber
+
+" Use visual bell instead of beeping when doing something wrong
+set visualbell
+
+" indents wrapped text
+set breakindent
+
+" decreases time it takes for cursor hold event to fire for autosave
+set updatetime=500
+
+" disable swap files
+set noswapfile
+
+" sets splits to be default to bottom or to right
+set splitbelow
+set splitright
+
+" Attempt to determine the type of a file based on its name and possibly its
+" contents. Use this to allow intelligent auto-indenting for each filetype,
+" and for plugins that are filetype specific.
+filetype indent plugin on
+
+" enable syntax and plugins (for netrw)
+syntax enable
+filetype plugin on
+
+" highlights searched term
+set hlsearch
+
+" auto jumps to first match for search
+set incsearch
+
+" make backspace work normally
+"set backspace=indent,eol,start
+
+" sets <space> to leader key
+let mapleader = "\<Space>"
+
+" enables fzf
+set rtp+=/usr/local/opt/fzf
+
+" autoread when changes on files from disk
+set autoread
+
+" Indentation settings for using 2 spaces instead of tabs.
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+
+" Search down into subfolders
+" Provides tab-completion for all file-related tasks
+set path+=**
+
+" Display all matching files when we tab complete
+set wildmenu
+
+" get rid of netrw banner
+let g:netrw_banner=0
+
+" enable ale completion
+let g:ale_completion_enabled=1
+
+" make hidden files showed by default in nerdtree
+let NERDTreeShowHidden=1
+
+" }}}
+
+" Normal mappings {{{
+
+" sets a search to always be in regex mode
+nnoremap / /\v
+
+" sets hl to stop highlight from last search
+nnoremap <leader>hl :call DeleteSearchMatches()<cr>:noh<cr>
+
+" allows search with motion
+nnoremap <leader>/ :set operatorfunc=<SID>SearchOperator<cr>g@
+vnoremap <leader>/ :<c-u>call <SID>SearchOperator(visualmode())<cr>
+
+function! s:SearchOperator(type)
+  let saved_anonymous_register = @@
+
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+
+  call DeleteSearchMatches()
+
+  let @/ = @@
+  call matchadd('search', @/)
+
+  let @@ = saved_anonymous_register
+endfunction
+
+function! DeleteSearchMatches()
+  let matches = getmatches()
+
+  for i in matches
+    if i['group'] ==# 'Search'
+      call matchdelete(i['id'])
+    endif
+  endfor
+endfunction
+
+" global text search
+nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
+nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
+
+function! s:AckOperator(type)
+  let saved_unnamed_register = @@
+
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+
+  call AckOperatorFullTextSearch(@@, ".")
+
+  let @@ = saved_unnamed_register
+endfunction
+
+
+function! g:AckOperatorFullTextSearch(value, directories)
+  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
+  call matchadd('Search', a:value)
+endfunction
+
+" sets ev to open init.vim in vertical split
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+
+" sets sv to source any changes to init.vim
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" sets tn to next tab
+nnoremap <leader>tn :tabn<cr>
+
+" sets tp to previous tab
+nnoremap <leader>tp :tabp<cr>
+
+" closes tab with q
+nnoremap <leader>q :q!<cr>
+
+" allows changing windows with alt + movement key
+nnoremap <C-h> <c-w>h
+nnoremap <C-j> <c-w>j
+nnoremap <C-k> <c-w>k
+nnoremap <C-l> <c-w>l
+
+" easy redraw
+nnoremap <F5> :redraw!<cr>
+
+" easy window resize
+nnoremap <leader><up> :resize +5<cr>
+nnoremap <leader><down> :resize -5<cr>
+nnoremap <leader><left> :vertical resize -5<cr>
+nnoremap <leader><right> :vertical resize +5<cr>
+
+" ctrl-p for fzf
+nnoremap <C-p> :FZF<cr>
+
+" toggle explore
+nnoremap <leader>nt :NERDTreeToggle<cr>
+
+" go to definition
+nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
+nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
+nnoremap <leader>r :ALEFindReferences<cr>
+
+" show hover info
+nnoremap <leader>h :ALEHover<cr>
+
+" find references
+nnoremap <leader>f :ALEFindReferences<cr>
+" }}}
+
+" Visual Mappings {{{
+
+" allows copying text to system clipboard with control-c -
+" linux needs dependency installed, but mac uses something else
+" sudo apt-get update && sudo apt-get install vim-gtk
+
+vnoremap <C-c> :<C-u>call CopyToClipboard()<cr>
+
+function! CopyToClipboard()
+  normal! `<v`>"+y
+endfunction
+
+nnoremap <leader>p "+p
+
+" }}}
+
+" Insert Mappings {{{
+" allows changing windows with alt + movement key
+inoremap <C-h> <Esc><c-w>h
+inoremap <C-j> <Esc><c-w>j
+inoremap <C-k> <Esc><c-w>k
+inoremap <C-l> <Esc><c-w>l
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" }}}
+
+" Command Mappings {{{
+cnoreabbrev gp call PushBranch()
+cnoreabbrev ggfl call ForcePushBranch()
+cnoreabbrev gup Git pull --rebase
+
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! PushBranch()
+  let branch = GitBranch()
+  execute "Git push -u origin " . branch
+endfunction
+
+function! ForcePushBranch()
+  let branch = GitBranch()
+  execute "Git push --force -u origin " . branch
+endfunction
+
+cnoreabbrev space call WritePWD()
+
+function! WritePWD()
+  redir @+>
+  pwd
+  redir END
+endfunction
+" }}}
+
+" Autocmd Groups {{{
+
+" sets folding for vim files
+augroup filetype_vim
+  autocmd!
+  autocmd FileType vim setlocal foldmethod=marker
+augroup END
+
+augroup autosave
+  autocmd!
+  autocmd VimLeavePre,FocusLost,CursorHold,CursorHoldI,WinLeave,TabLeave,InsertLeave,BufDelete,BufWinLeave * call AutoSave()
+augroup END
+
+function! AutoSave()
+  if &buftype !=# 'terminal' && &buftype != "nofile"
+    if &modified
+      :w
+    endif
+  endif
+endfunction
+
+augroup autoload
+  autocmd!
+  autocmd VimLeavePre,FocusLost,CursorHold,CursorHoldI,WinLeave,TabLeave,InsertLeave,BufDelete,BufWinLeave * if mode() != 'c' | checktime | endif
+augroup END
+
+" }}}
+
