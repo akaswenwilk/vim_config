@@ -47,34 +47,16 @@ set hlsearch
 " auto jumps to first match for search
 set incsearch
 
-" make backspace work normally
-"set backspace=indent,eol,start
-
 " sets <space> to leader key
 let mapleader = "\<Space>"
 
 " enables fzf
-set rtp+=/usr/local/opt/fzf
+set rtp+=/opt/homebrew/bin/fzf
 
 " autoread when changes on files from disk
 set autoread
 
-" Indentation settings for using 2 spaces instead of tabs.
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-
-" Search down into subfolders
-" Provides tab-completion for all file-related tasks
-set path+=**
-
-" Display all matching files when we tab complete
-set wildmenu
-
-" get rid of netrw banner
-let g:netrw_banner=0
-
-" enable ale completion
+" enable ale completion 
 let g:ale_completion_enabled=1
 
 " make hidden files showed by default in nerdtree
@@ -126,7 +108,6 @@ endfunction
 " global text search
 nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
 vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
-nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
 
 function! s:AckOperator(type)
   let saved_unnamed_register = @@
@@ -144,17 +125,31 @@ function! s:AckOperator(type)
   let @@ = saved_unnamed_register
 endfunction
 
+nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
+nnoremap <leader>F :call GrepOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
 
-function! g:AckOperatorFullTextSearch(value, directories)
-  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
+function! g:GrepOperatorFullTextSearch(value, directories)
+  silent execute "grep! " . shellescape(a:value) . " " . shellescape(a:directories)
   call matchadd('Search', a:value)
 endfunction
 
-" sets ev to open init.vim in vertical split
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+function! s:GrepOperator(type)
+    let saved_unnamed_register = @@
 
-" sets sv to source any changes to init.vim
-nnoremap <leader>sv :source $MYVIMRC<cr>
+    if a:type ==# 'v'
+        normal! `<v`>y
+    elseif a:type ==# 'char'
+        normal! `[v`]y
+    else
+        return
+    endif
+
+    silent execute "grep! -R " . shellescape(@@) . " ."
+    copen
+
+    let @@ = saved_unnamed_register
+endfunction
 
 " sets tn to next tab
 nnoremap <leader>tn :tabn<cr>
@@ -165,14 +160,11 @@ nnoremap <leader>tp :tabp<cr>
 " closes tab with q
 nnoremap <leader>q :q!<cr>
 
-" allows changing windows with alt + movement key
+" allows changing windows with ctrl key
 nnoremap <C-h> <c-w>h
 nnoremap <C-j> <c-w>j
 nnoremap <C-k> <c-w>k
 nnoremap <C-l> <c-w>l
-
-" easy redraw
-nnoremap <F5> :redraw!<cr>
 
 " easy window resize
 nnoremap <leader><up> :resize +5<cr>
@@ -193,9 +185,6 @@ nnoremap <leader>r :ALEFindReferences<cr>
 
 " show hover info
 nnoremap <leader>h :ALEHover<cr>
-
-" find references
-nnoremap <leader>f :ALEFindReferences<cr>
 " }}}
 
 " Visual Mappings {{{
