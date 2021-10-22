@@ -125,16 +125,18 @@ function! s:AckOperator(type)
   let @@ = saved_unnamed_register
 endfunction
 
-nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
-nnoremap <leader>F :call GrepOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
 
-function! g:GrepOperatorFullTextSearch(value, directories)
-  silent execute "grep! " . shellescape(a:value) . " " . shellescape(a:directories)
+nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
+nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
+
+function! g:AckOperatorFullTextSearch(value, directories)
+  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
   call matchadd('Search', a:value)
 endfunction
 
-function! s:GrepOperator(type)
+function! s:AckOperator(type)
     let saved_unnamed_register = @@
 
     if a:type ==# 'v'
@@ -145,7 +147,7 @@ function! s:GrepOperator(type)
         return
     endif
 
-    silent execute "grep! -R " . shellescape(@@) . " ."
+    silent execute "Ack! " . shellescape(@@) . " ."
     copen
 
     let @@ = saved_unnamed_register

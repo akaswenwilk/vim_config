@@ -19,3 +19,6 @@
 [submodule "pack/plugins/start/fzf-vim"]
 	path = pack/plugins/start/fzf-vim
 	url = https://github.com/junegunn/fzf
+[submodule "pack/plugins/start/ack"]
+	path = pack/plugins/start/ack
+	url = https://github.com/mileszs/ack.vim
