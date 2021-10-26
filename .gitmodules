@@ -22,3 +22,6 @@
 [submodule "pack/plugins/start/ack"]
 	path = pack/plugins/start/ack
 	url = https://github.com/mileszs/ack.vim
+[submodule "pack/plugins/start/indentline"]
+	path = pack/plugins/start/indentline
+	url = https://github.com/yggdroot/indentline
