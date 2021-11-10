@@ -2,6 +2,9 @@
 
 set nocompatible
 
+" re-reads file if changes occurred on disk while open in buffer
+set autoread
+
 " Use case insensitive search, except when using capital letters
 set ignorecase
 set smartcase
@@ -35,7 +38,7 @@ set splitright
 " Attempt to determine the type of a file based on its name and possibly its
 " contents. Use this to allow intelligent auto-indenting for each filetype,
 " and for plugins that are filetype specific.
-filetype indent plugin on
+filetype plugin indent on
 
 " enable syntax and plugins (for netrw)
 syntax enable
