@@ -213,6 +213,9 @@ endfunction
 
 nnoremap <leader>p "+p
 
+" easy mapping to format json file
+nnoremap <leader>j :%!jq .<cr>
+
 " }}}
 
 " Insert Mappings {{{
@@ -250,6 +253,7 @@ function! WritePWD()
   pwd
   redir END
 endfunction
+
 " }}}
 
 " Autocmd Groups {{{
