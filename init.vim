@@ -186,7 +186,7 @@ nnoremap <leader>nt :NERDTreeToggle<cr>
 " go to definition
 nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
 nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
-nnoremap <leader>r :ALEFindReferences<cr>
+nnoremap <leader>r :ALEFindReferences -relative<cr>
 
 " show hover info
 nnoremap <leader>h :ALEHover<cr>
