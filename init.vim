@@ -199,6 +199,9 @@ if &diff
 endif
 " }}}
 
+" delete whitespaces
+nnoremap <leader>s :%s/\s\+$//e<CR>
+
 " Visual Mappings {{{
 
 " allows copying text to system clipboard with control-c -
