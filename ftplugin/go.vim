@@ -10,3 +10,10 @@ nnoremap <leader>i :GoImports<cr>
 nnoremap <leader>f :GoTestFunc<cr>
 
 nnoremap <leader>k :w<cr>:GoTest -v `expand('%:h')`<cr>
+
+nnoremap <leader>b :call GetBreakPoint()<cr>
+
+function! GetBreakPoint()
+	exe "GoDebugBreakpoint"
+	let @*="break ".expand('%').":".line(".")
+endfunction
