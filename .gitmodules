@@ -28,3 +28,6 @@
 [submodule "pack/plugins/start/vim-rust"]
 	path = pack/plugins/start/vim-rust
 	url = https://github.com/rust-lang/rust.vim.git
+[submodule "pack/plugins/start/vim-easy-align"]
+	path = pack/plugins/start/vim-easy-align
+	url = https://github.com/junegunn/vim-easy-align.git
