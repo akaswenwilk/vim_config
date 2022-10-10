@@ -5,6 +5,8 @@ set nocompatible
 " re-reads file if changes occurred on disk while open in buffer
 set autoread
 
+colorscheme gruvbox
+
 " Use case insensitive search, except when using capital letters
 set ignorecase
 set smartcase
