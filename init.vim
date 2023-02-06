@@ -1,5 +1,7 @@
 " Settings {{{
 
+let g:coc_global_extensions = ['coc-solargraph']
+
 set nocompatible
 
 " re-reads file if changes occurred on disk while open in buffer
@@ -60,9 +62,6 @@ set rtp+=/opt/homebrew/bin/fzf
 
 " autoread when changes on files from disk
 set autoread
-
-" enable ale completion 
-let g:ale_completion_enabled=1
 
 " make hidden files showed by default in nerdtree
 let NERDTreeShowHidden=1
@@ -186,9 +185,9 @@ nnoremap <C-p> :FZF<cr>
 nnoremap <leader>nt :NERDTreeToggle<cr>
 
 " go to definition
-nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
+nnoremap <leader>d :vsp<cr>:call CocActionAsync('jumpDefinition')<cr>
 nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
-nnoremap <leader>r :ALEFindReferences -relative<cr>
+nnoremap <leader>r :vsp<cr><Plug>(coc-references-used)
 
 " show hover info
 nnoremap <leader>h :ALEHover<cr>
@@ -229,7 +228,15 @@ inoremap <C-h> <Esc><c-w>h
 inoremap <C-j> <Esc><c-w>j
 inoremap <C-k> <Esc><c-w>k
 inoremap <C-l> <Esc><c-w>l
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
 " }}}
 
 " Command Mappings {{{

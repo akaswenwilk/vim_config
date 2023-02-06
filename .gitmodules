@@ -1,9 +1,6 @@
 [submodule "pack/plugins/start/nerdtree"]
 	path = pack/plugins/start/nerdtree
 	url = https://github.com/preservim/nerdtree.git
-[submodule "pack/plugins/start/ale"]
-	path = pack/plugins/start/ale
-	url = https://github.com/dense-analysis/ale.git
 [submodule "pack/plugins/start/nerdcommenter"]
 	path = pack/plugins/start/nerdcommenter
 	url = https://github.com/preservim/nerdcommenter.git
@@ -34,3 +31,6 @@
 [submodule "pack/plugins/start/gruvbox"]
 	path = pack/plugins/start/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
+[submodule "pack/plugins/start/coc"]
+	path = pack/plugins/start/coc
+	url = https://github.com/neoclide/coc.nvim.git
