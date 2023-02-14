@@ -1,1 +1,4 @@
-
+{
+    "coc.preferences.useQuickfixForLocations": true,
+    "coc.preferences.jumpCommand": "vsplit"
+}

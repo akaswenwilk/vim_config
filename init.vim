@@ -185,12 +185,10 @@ nnoremap <C-p> :FZF<cr>
 nnoremap <leader>nt :NERDTreeToggle<cr>
 
 " go to definition
-nnoremap <leader>d :vsp<cr>:call CocActionAsync('jumpDefinition')<cr>
-nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
-nnoremap <leader>r :vsp<cr><Plug>(coc-references-used)
-
-" show hover info
-nnoremap <leader>h :ALEHover<cr>
+nmap <leader>d <Plug>(coc-definition)
+nmap <leader>i <Plug>(coc-implementation)
+nmap <leader>t <Plug>(coc-type-definition)
+nmap <leader>r <Plug>(coc-references-used)
 
 " for vimdiff mode
 if &diff
@@ -292,6 +290,12 @@ endfunction
 augroup autoload
   autocmd!
   autocmd VimLeavePre,FocusLost,CursorHold,CursorHoldI,WinLeave,TabLeave,InsertLeave,BufDelete,BufWinLeave * if mode() != 'c' | checktime | endif
+augroup END
+
+augroup quickfixOpen
+  autocmd!
+  autocmd FileType qf nnoremap <buffer> t <C-W><Enter><C-W>T
+  autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
 augroup END
 
 " }}}
