@@ -1,6 +1,6 @@
 " Settings {{{
 
-let g:coc_global_extensions = ['coc-solargraph']
+let g:coc_global_extensions = ['coc-solargraph', 'coc-go']
 
 set nocompatible
 
