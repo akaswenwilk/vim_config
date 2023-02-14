@@ -68,7 +68,7 @@ set autoread
 
 
 " Plugin Settings {{{
-let g:coc_global_extensions = ['coc-solargraph', 'coc-go', 'coc-rust-analyzer']
+let g:coc_global_extensions = ['coc-solargraph', 'coc-go', 'coc-rust-analyzer', 'coc-snippets']
 colorscheme gruvbox
 
 " enables fzf
@@ -138,6 +138,12 @@ nmap <leader>d <Plug>(coc-definition)
 nmap <leader>i <Plug>(coc-implementation)
 nmap <leader>t <Plug>(coc-type-definition)
 nmap <leader>r <Plug>(coc-references-used)
+" Show hover when provider exists, fallback to vim's builtin behavior.
+nnoremap K :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  call CocActionAsync('definitionHover')
+endfunction
+
 
 " allows using tab to select autocompletion with coc nvim
 function! CheckBackspace() abort
