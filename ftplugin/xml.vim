@@ -1,6 +1,5 @@
 set shiftwidth=2
 set softtabstop=2
-set expandtab
 
 function! DoPrettyXML()
   " save the filetype so we can restore it later

@@ -1,13 +1,18 @@
 " Settings {{{
-
-let g:coc_global_extensions = ['coc-solargraph', 'coc-go']
-
 set nocompatible
+
+" In Insert mode: Use the appropriate number of spaces to insert a <Tab>
+set expandtab 
+
+" default shift amount
+set shiftwidth=2
+set softtabstop=2
+
+" Round indent to multiple of shiftwidth
+set shiftround
 
 " re-reads file if changes occurred on disk while open in buffer
 set autoread
-
-colorscheme gruvbox
 
 " Use case insensitive search, except when using capital letters
 set ignorecase
@@ -44,9 +49,8 @@ set splitright
 " and for plugins that are filetype specific.
 filetype plugin indent on
 
-" enable syntax and plugins (for netrw)
+" enable syntax
 syntax enable
-filetype plugin on
 
 " highlights searched term
 set hlsearch
@@ -57,16 +61,97 @@ set incsearch
 " sets <space> to leader key
 let mapleader = "\<Space>"
 
-" enables fzf
-set rtp+=/opt/homebrew/bin/fzf
-
 " autoread when changes on files from disk
 set autoread
+" }}}
+
+
+
+" Plugin Settings {{{
+let g:coc_global_extensions = ['coc-solargraph', 'coc-go', 'coc-rust-analyzer']
+colorscheme gruvbox
+
+" enables fzf
+set rtp+=/opt/homebrew/bin/fzf
 
 " make hidden files showed by default in nerdtree
 let NERDTreeShowHidden=1
 
+" sets ack to use ripgrep
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
 " }}}
+
+
+
+" Plugin Mappings {{{
+" global text search
+nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
+nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
+
+function! s:AckOperator(type)
+  let saved_unnamed_register = @@
+
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+
+  call AckOperatorFullTextSearch(@@, ".")
+
+  let @@ = saved_unnamed_register
+endfunction
+
+function! g:AckOperatorFullTextSearch(value, directories)
+  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
+  call matchadd('Search', a:value)
+endfunction
+
+function! s:AckOperator(type)
+    let saved_unnamed_register = @@
+
+    if a:type ==# 'v'
+        normal! `<v`>y
+    elseif a:type ==# 'char'
+        normal! `[v`]y
+    else
+        return
+    endif
+
+    silent execute "Ack! " . shellescape(@@) . " ."
+    copen
+
+    let @@ = saved_unnamed_register
+endfunction
+
+" ctrl-p for fzf
+nnoremap <C-p> :FZF<cr>
+
+" toggle explore
+nnoremap <leader>nt :NERDTreeToggle<cr>
+
+" go to definition
+nmap <leader>d <Plug>(coc-definition)
+nmap <leader>i <Plug>(coc-implementation)
+nmap <leader>t <Plug>(coc-type-definition)
+nmap <leader>r <Plug>(coc-references-used)
+
+" allows using tab to select autocompletion with coc nvim
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+" }}}
+
+
 
 " Normal mappings {{{
 
@@ -75,6 +160,16 @@ nnoremap / /\v
 
 " sets hl to stop highlight from last search
 nnoremap <leader>hl :call DeleteSearchMatches()<cr>:noh<cr>
+function! DeleteSearchMatches()
+  let matches = getmatches()
+
+  for i in matches
+    if i['group'] ==# 'Search'
+      call matchdelete(i['id'])
+    endif
+  endfor
+endfunction
+
 
 " allows search with motion
 nnoremap <leader>/ :set operatorfunc=<SID>SearchOperator<cr>g@
@@ -99,64 +194,6 @@ function! s:SearchOperator(type)
   let @@ = saved_anonymous_register
 endfunction
 
-function! DeleteSearchMatches()
-  let matches = getmatches()
-
-  for i in matches
-    if i['group'] ==# 'Search'
-      call matchdelete(i['id'])
-    endif
-  endfor
-endfunction
-
-" global text search
-nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
-
-function! s:AckOperator(type)
-  let saved_unnamed_register = @@
-
-  if a:type ==# 'v'
-    normal! `<v`>y
-  elseif a:type ==# 'char'
-    normal! `[v`]y
-  else
-    return
-  endif
-
-  call AckOperatorFullTextSearch(@@, ".")
-
-  let @@ = saved_unnamed_register
-endfunction
-
-let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
-
-nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
-nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
-
-function! g:AckOperatorFullTextSearch(value, directories)
-  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
-  call matchadd('Search', a:value)
-endfunction
-
-function! s:AckOperator(type)
-    let saved_unnamed_register = @@
-
-    if a:type ==# 'v'
-        normal! `<v`>y
-    elseif a:type ==# 'char'
-        normal! `[v`]y
-    else
-        return
-    endif
-
-    silent execute "Ack! " . shellescape(@@) . " ."
-    copen
-
-    let @@ = saved_unnamed_register
-endfunction
-
 " sets tn to next tab
 nnoremap <leader>tn :tabn<cr>
 
@@ -178,31 +215,20 @@ nnoremap <leader><down> :resize -5<cr>
 nnoremap <leader><left> :vertical resize -5<cr>
 nnoremap <leader><right> :vertical resize +5<cr>
 
-" ctrl-p for fzf
-nnoremap <C-p> :FZF<cr>
-
-" toggle explore
-nnoremap <leader>nt :NERDTreeToggle<cr>
-
-" go to definition
-nmap <leader>d <Plug>(coc-definition)
-nmap <leader>i <Plug>(coc-implementation)
-nmap <leader>t <Plug>(coc-type-definition)
-nmap <leader>r <Plug>(coc-references-used)
-
 " for vimdiff mode
 if &diff
     nnoremap <leader>1 :diffget LOCAL<CR>
     nnoremap <leader>2 :diffget BASE<CR>
     nnoremap <leader>3 :diffget REMOTE<CR>
 endif
-" }}}
 
 " delete whitespaces
 nnoremap <leader>s :%s/\s\+$//e<CR>
+" }}}
+
+
 
 " Visual Mappings {{{
-
 " allows copying text to system clipboard with control-c -
 " linux needs dependency installed, but mac uses something else
 " sudo apt-get update && sudo apt-get install vim-gtk
@@ -215,10 +241,11 @@ endfunction
 
 nnoremap <leader>p "+p
 
-" easy mapping to format json file
+" easy mapping to format json file.  requires installation of jq
 nnoremap <leader>j :%!jq .<cr>
-
 " }}}
+
+
 
 " Insert Mappings {{{
 " allows changing windows with alt + movement key
@@ -226,16 +253,9 @@ inoremap <C-h> <Esc><c-w>h
 inoremap <C-j> <Esc><c-w>j
 inoremap <C-k> <Esc><c-w>k
 inoremap <C-l> <Esc><c-w>l
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
 " }}}
+
+
 
 " Command Mappings {{{
 cnoreabbrev gp call PushBranch()
@@ -263,17 +283,13 @@ function! WritePWD()
   pwd
   redir END
 endfunction
-
 " }}}
+
+
 
 " Autocmd Groups {{{
 
 " sets folding for vim files
-augroup filetype_vim
-  autocmd!
-  autocmd FileType vim setlocal foldmethod=marker
-augroup END
-
 augroup autosave
   autocmd!
   autocmd VimLeavePre,FocusLost,CursorHold,CursorHoldI,WinLeave,TabLeave,InsertLeave,BufDelete,BufWinLeave * call AutoSave()
@@ -287,16 +303,9 @@ function! AutoSave()
   endif
 endfunction
 
-augroup autoload
-  autocmd!
-  autocmd VimLeavePre,FocusLost,CursorHold,CursorHoldI,WinLeave,TabLeave,InsertLeave,BufDelete,BufWinLeave * if mode() != 'c' | checktime | endif
-augroup END
-
 augroup quickfixOpen
   autocmd!
   autocmd FileType qf nnoremap <buffer> t <C-W><Enter><C-W>T
   autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
 augroup END
-
 " }}}
-
