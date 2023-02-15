@@ -149,6 +149,7 @@ inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
 inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
+nmap <leader>fs <Plug>(coc-codeaction-refactor)
 " }}}
 
 
@@ -304,6 +305,7 @@ augroup END
 function! AutoSave()
   if &buftype !=# 'terminal' && &buftype != "nofile"
     if &modified
+      call CocAction('organizeImport')
       :w
     endif
   endif

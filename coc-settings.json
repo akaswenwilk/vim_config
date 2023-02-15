@@ -1,5 +1,6 @@
 {
     "coc.preferences.useQuickfixForLocations": true,
     "coc.preferences.jumpCommand": "vsplit",
+    "coc.preferences.formatOnSave": true,
     "snippets.ultisnips.pythonPrompt": false
 }
