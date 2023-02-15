@@ -144,22 +144,22 @@ function! ShowDocumentation()
   call CocActionAsync('definitionHover')
 endfunction
 
+" use tab to navigate autocompletions
+inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
-" allows using tab to select autocompletion with coc nvim
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
 " }}}
 
 
 
 " Normal mappings {{{
+
+" use ev to open split of vimrc
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+" use sv to source latest vimrc changes
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
 
 " sets a search to always be in regex mode
 nnoremap / /\v
