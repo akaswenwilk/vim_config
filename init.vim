@@ -149,7 +149,11 @@ inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
 inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
+" use fs to trigger refactor
 nmap <leader>fs <Plug>(coc-codeaction-refactor)
+
+" use n to trigger rename
+nmap <leader>n <Plug>(coc-rename)
 " }}}
 
 
