@@ -68,7 +68,7 @@ set autoread
 
 
 " Plugin Settings {{{
-let g:coc_global_extensions = ['coc-solargraph', 'coc-go', 'coc-rust-analyzer', 'coc-snippets']
+let g:coc_global_extensions = ['coc-solargraph', 'coc-go', 'coc-rust-analyzer', 'coc-tabnine']
 colorscheme gruvbox
 
 " enables fzf
