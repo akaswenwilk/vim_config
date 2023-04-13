@@ -18,3 +18,14 @@ nnoremap <leader>b :call GetBreakPoint()<cr>
 function! GetBreakPoint()
 	let @*="break ".expand('%').":".line(".")
 endfunction
+
+augroup autosave
+  autocmd!
+  autocmd BufLeave,InsertLeave,CursorHold <buffer> call GoWrite()
+augroup END
+
+function! GoWrite()
+  GoImports
+  GoFmt
+  silent! update
+endfunction

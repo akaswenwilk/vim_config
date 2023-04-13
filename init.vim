@@ -300,10 +300,10 @@ endfunction
 
 " Autocmd Groups {{{
 
-" sets folding for vim files
+" sets autosave
 augroup autosave
   autocmd!
-  autocmd TextChanged,TextChangedI <buffer> silent write
+  autocmd BufLeave,InsertLeave,CursorHold <buffer> silent! update
 augroup END
 
 augroup quickfixOpen
