@@ -1,4 +1,3 @@
 setlocal foldmethod=syntax
-
-" Disable quote concealing in JSON files
-let g:vim_json_conceal=0
+set shiftwidth=2
+set softtabstop=2

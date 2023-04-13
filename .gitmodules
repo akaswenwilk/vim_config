@@ -28,3 +28,6 @@
 [submodule "pack/plugins/start/vim-go"]
 	path = pack/plugins/start/vim-go
 	url = https://github.com/fatih/vim-go.git
+[submodule "pack/plugins/start/ale"]
+	path = pack/plugins/start/ale
+	url = https://github.com/dense-analysis/ale.git

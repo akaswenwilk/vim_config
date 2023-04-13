@@ -4,13 +4,7 @@ set softtabstop=8
 
 let g:go_gopls_gofumpt = v:true
 
-nmap <leader>i <Plug>(go-imports)
 nmap <leader>f <Plug>(go-test-func)
-nmap K <Plug>(go-doc)
-nmap <leader>d <Plug>(go-def-vertical)
-nmap <leader>t <Plug>(go-def-type-vertical)
-nmap <leader>rn <Plug>(go-rename)
-nmap <leader>r <Plug>(go-referrers)
 nmap <leader>fs <Plug>(go-fill-struct)
 
 nnoremap <leader>b :call GetBreakPoint()<cr>
@@ -21,11 +15,14 @@ endfunction
 
 augroup autosave
   autocmd!
-  autocmd BufLeave,InsertLeave,CursorHold <buffer> call GoWrite()
+  autocmd BufLeave,CursorHold <buffer> call GoWrite()
 augroup END
 
 function! GoWrite()
   GoImports
   GoFmt
   silent! update
+  silent! ALELint
 endfunction
+
+let g:go_fmt_fail_silently = 1

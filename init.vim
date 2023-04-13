@@ -79,6 +79,11 @@ let NERDTreeShowHidden=1
 
 " sets ack to use ripgrep
 let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+
+" ale completion
+let g:ale_completion_enabled = 1
+" show hover info in popup window
+let g:ale_hover_to_floating_preview = 1
 " }}}
 
 
@@ -133,27 +138,25 @@ nnoremap <C-p> :FZF<cr>
 " toggle explore
 nnoremap <leader>nt :NERDTreeToggle<cr>
 
-" go to definition
-"nmap <leader>d <Plug>(coc-definition)
-"nmap <leader>i <Plug>(coc-implementation)
-"nmap <leader>t <Plug>(coc-type-definition)
-"nmap <leader>r <Plug>(coc-references-used)
-"" Show hover when provider exists, fallback to vim's builtin behavior.
-"nnoremap K :call ShowDocumentation()<CR>
-"function! ShowDocumentation()
-  "call CocActionAsync('definitionHover')
-"endfunction
+" trigger ale completion with tab
+function! SmartInsertCompletion() abort
+  " Use the default CTRL-N in completion menus
+  if pumvisible()
+    return "\<C-n>"
+  endif
 
-"" use tab to navigate autocompletions
-"inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
-"inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
-"inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+  " Exit and re-enter insert mode, and use insert completion
+  return "\<C-c>a\<C-n>"
+endfunction
 
-"" use fs to trigger refactor
-"nmap <leader>fs <Plug>(coc-codeaction-refactor)
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 
-"" use n to trigger rename
-"nmap <leader>n <Plug>(coc-rename)
+nnoremap K :ALEHover<cr>
+nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
+nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
+nnoremap <leader>rn :ALERename<cr>
+nnoremap <leader>r :ALEFindReferences<cr>
 " }}}
 
 
@@ -303,32 +306,17 @@ endfunction
 " sets autosave
 augroup autosave
   autocmd!
-  autocmd BufLeave,InsertLeave,CursorHold <buffer> silent! update
+  autocmd BufLeave,InsertLeave,CursorHold * call Update()
 augroup END
+
+function! Update()
+  silent! update
+  silent! ALELint
+endfunction
 
 augroup quickfixOpen
   autocmd!
   autocmd FileType qf nnoremap <buffer> t <C-W><Enter><C-W>T
   autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
-augroup END
-
-set cot=menu,menuone
-
-" autocomplete for vim from https://gist.github.com/qstrahl/7795524
-ino <BS> <BS><C-r>=getline('.')[col('.')-3:col('.')-2]=~#'\k\k'?!pumvisible()?"\<lt>C-n>\<lt>C-p>":'':pumvisible()?"\<lt>C-y>":''<CR>
-ino <CR> <C-r>=pumvisible()?"\<lt>C-y>":""<CR><CR>
-ino <Tab> <C-r>=pumvisible()?"\<lt>C-n>":"\<lt>Tab>"<CR>
-ino <S-Tab> <C-r>=pumvisible()?"\<lt>C-p>":"\<lt>S-Tab>"<CR>
-
-augroup MyAutoComplete 
-    au!
-    au InsertCharPre * if
-    \ !exists('s:complete') &&
-    \ !pumvisible() &&
-    \ getline('.')[col('.')-2].v:char =~# '\k\k' |
-        \ let s:complete = 1 |
-        \ noautocmd call feedkeys("\<C-n>\<C-p>", "nt") |
-    \ endif
-    au CompleteDone * if exists('s:complete') | unlet s:complete | endif
 augroup END
 " }}}
