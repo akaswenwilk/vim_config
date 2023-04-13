@@ -68,7 +68,6 @@ set autoread
 
 
 " Plugin Settings {{{
-let g:coc_global_extensions = ['coc-solargraph', 'coc-go', 'coc-rust-analyzer', 'coc-tabnine']
 colorscheme gruvbox
 
 " enables fzf
@@ -134,26 +133,26 @@ nnoremap <C-p> :FZF<cr>
 nnoremap <leader>nt :NERDTreeToggle<cr>
 
 " go to definition
-nmap <leader>d <Plug>(coc-definition)
-nmap <leader>i <Plug>(coc-implementation)
-nmap <leader>t <Plug>(coc-type-definition)
-nmap <leader>r <Plug>(coc-references-used)
-" Show hover when provider exists, fallback to vim's builtin behavior.
-nnoremap K :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  call CocActionAsync('definitionHover')
-endfunction
+"nmap <leader>d <Plug>(coc-definition)
+"nmap <leader>i <Plug>(coc-implementation)
+"nmap <leader>t <Plug>(coc-type-definition)
+"nmap <leader>r <Plug>(coc-references-used)
+"" Show hover when provider exists, fallback to vim's builtin behavior.
+"nnoremap K :call ShowDocumentation()<CR>
+"function! ShowDocumentation()
+  "call CocActionAsync('definitionHover')
+"endfunction
 
-" use tab to navigate autocompletions
-inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
-inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
-inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+"" use tab to navigate autocompletions
+"inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+"inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+"inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
-" use fs to trigger refactor
-nmap <leader>fs <Plug>(coc-codeaction-refactor)
+"" use fs to trigger refactor
+"nmap <leader>fs <Plug>(coc-codeaction-refactor)
 
-" use n to trigger rename
-nmap <leader>n <Plug>(coc-rename)
+"" use n to trigger rename
+"nmap <leader>n <Plug>(coc-rename)
 " }}}
 
 
@@ -303,21 +302,32 @@ endfunction
 " sets folding for vim files
 augroup autosave
   autocmd!
-  autocmd VimLeavePre,FocusLost,CursorHold,CursorHoldI,WinLeave,TabLeave,InsertLeave,BufDelete,BufWinLeave * call AutoSave()
+  autocmd TextChanged,TextChangedI <buffer> silent write
 augroup END
-
-function! AutoSave()
-  if &buftype !=# 'terminal' && &buftype != "nofile"
-    if &modified
-      call CocAction('organizeImport')
-      :w
-    endif
-  endif
-endfunction
 
 augroup quickfixOpen
   autocmd!
   autocmd FileType qf nnoremap <buffer> t <C-W><Enter><C-W>T
   autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
+augroup END
+
+set cot=menu,menuone
+
+" autocomplete for vim from https://gist.github.com/qstrahl/7795524
+ino <BS> <BS><C-r>=getline('.')[col('.')-3:col('.')-2]=~#'\k\k'?!pumvisible()?"\<lt>C-n>\<lt>C-p>":'':pumvisible()?"\<lt>C-y>":''<CR>
+ino <CR> <C-r>=pumvisible()?"\<lt>C-y>":""<CR><CR>
+ino <Tab> <C-r>=pumvisible()?"\<lt>C-n>":"\<lt>Tab>"<CR>
+ino <S-Tab> <C-r>=pumvisible()?"\<lt>C-p>":"\<lt>S-Tab>"<CR>
+
+augroup MyAutoComplete 
+    au!
+    au InsertCharPre * if
+    \ !exists('s:complete') &&
+    \ !pumvisible() &&
+    \ getline('.')[col('.')-2].v:char =~# '\k\k' |
+        \ let s:complete = 1 |
+        \ noautocmd call feedkeys("\<C-n>\<C-p>", "nt") |
+    \ endif
+    au CompleteDone * if exists('s:complete') | unlet s:complete | endif
 augroup END
 " }}}
