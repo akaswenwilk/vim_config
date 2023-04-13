@@ -63,6 +63,7 @@ let mapleader = "\<Space>"
 
 " autoread when changes on files from disk
 set autoread
+au CursorHold * checktime  
 " }}}
 
 
