@@ -68,97 +68,6 @@ au CursorHold * checktime
 
 
 
-" Plugin Settings {{{
-colorscheme gruvbox
-
-" enables fzf
-set rtp+=/opt/homebrew/bin/fzf
-
-" make hidden files showed by default in nerdtree
-let NERDTreeShowHidden=1
-
-" sets ack to use ripgrep
-let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
-
-" ale completion
-let g:ale_completion_enabled = 1
-" show hover info in popup window
-let g:ale_hover_to_floating_preview = 1
-" }}}
-
-
-
-" Plugin Mappings {{{
-" global text search
-nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
-nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
-
-function! s:AckOperator(type)
-  let saved_unnamed_register = @@
-
-  if a:type ==# 'v'
-    normal! `<v`>y
-  elseif a:type ==# 'char'
-    normal! `[v`]y
-  else
-    return
-  endif
-
-  call AckOperatorFullTextSearch(@@, ".")
-
-  let @@ = saved_unnamed_register
-endfunction
-
-function! g:AckOperatorFullTextSearch(value, directories)
-  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
-  call matchadd('Search', a:value)
-endfunction
-
-function! s:AckOperator(type)
-    let saved_unnamed_register = @@
-
-    if a:type ==# 'v'
-        normal! `<v`>y
-    elseif a:type ==# 'char'
-        normal! `[v`]y
-    else
-        return
-    endif
-
-    silent execute "Ack! " . shellescape(@@) . " ."
-    copen
-
-    let @@ = saved_unnamed_register
-endfunction
-
-" ctrl-p for fzf
-nnoremap <C-p> :FZF<cr>
-
-" toggle explore
-nnoremap <leader>nt :NERDTreeToggle<cr>
-
-" trigger ale completion with tab
-function! SmartInsertCompletion() abort
-  " Use the default CTRL-N in completion menus
-  if pumvisible()
-    return "\<C-n>"
-  endif
-
-  " Exit and re-enter insert mode, and use insert completion
-  return "\<C-c>a\<C-n>"
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" : "\<TAB>"
-
-nnoremap K :ALEHover<cr>
-nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
-nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
-nnoremap <leader>rn :ALERename<cr>
-nnoremap <leader>r :ALEFindReferences<cr>
-" }}}
-
 
 
 " Normal mappings {{{
@@ -320,3 +229,114 @@ augroup quickfixOpen
   autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
 augroup END
 " }}}
+
+call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
+
+" Declare the list of plugins.
+Plug 'mileszs/ack.vim'
+Plug 'dense-analysis/ale'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'morhetz/gruvbox'
+Plug 'Yggdroot/indentLine'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree'
+Plug 'junegunn/vim-easy-align', { 'for': 'cucumber' }
+Plug 'tpope/vim-fugitive'
+Plug 'fatih/vim-go', { 'for': ['go', 'cucumber'] }
+Plug 'tpope/vim-surround'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+" Plugin Settings {{{
+colorscheme gruvbox
+
+" enables fzf
+set rtp+=/opt/homebrew/bin/fzf
+
+" make hidden files showed by default in nerdtree
+let NERDTreeShowHidden=1
+
+" sets ack to use ripgrep
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+
+" ale completion
+let g:ale_completion_enabled = 1
+" show hover info in popup window
+let g:ale_hover_to_floating_preview = 1
+" }}}
+
+
+
+" Plugin Mappings {{{
+" global text search
+nnoremap <leader>g :set operatorfunc=<SID>AckOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>AckOperator(visualmode())<cr>
+nnoremap <leader>F :call AckOperatorFullTextSearch("", ".")<Left><Left><Left><Left><Left><Left><Left>
+
+function! s:AckOperator(type)
+  let saved_unnamed_register = @@
+
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+
+  call AckOperatorFullTextSearch(@@, ".")
+
+  let @@ = saved_unnamed_register
+endfunction
+
+function! g:AckOperatorFullTextSearch(value, directories)
+  silent execute "Ack! " . shellescape(a:value) . " " . shellescape(a:directories)
+  call matchadd('Search', a:value)
+endfunction
+
+function! s:AckOperator(type)
+    let saved_unnamed_register = @@
+
+    if a:type ==# 'v'
+        normal! `<v`>y
+    elseif a:type ==# 'char'
+        normal! `[v`]y
+    else
+        return
+    endif
+
+    silent execute "Ack! " . shellescape(@@) . " ."
+    copen
+
+    let @@ = saved_unnamed_register
+endfunction
+
+" ctrl-p for fzf
+nnoremap <C-p> :FZF<cr>
+
+" toggle explore
+nnoremap <leader>nt :NERDTreeToggle<cr>
+
+" trigger ale completion with tab
+function! SmartInsertCompletion() abort
+  " Use the default CTRL-N in completion menus
+  if pumvisible()
+    return "\<C-n>"
+  endif
+
+  " Exit and re-enter insert mode, and use insert completion
+  return "\<C-c>a\<C-n>"
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" : "\<TAB>"
+
+nnoremap K :ALEHover<cr>
+nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
+nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
+nnoremap <leader>rn :ALERename<cr>
+nnoremap <leader>r :ALEFindReferences<cr>
+" }}}
+
