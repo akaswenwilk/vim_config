@@ -238,7 +238,7 @@ Plug 'dense-analysis/ale'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
-Plug 'Yggdroot/indentLine'
+Plug 'graywh/vim-colorindent'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 Plug 'junegunn/vim-easy-align', { 'for': 'cucumber' }
@@ -340,3 +340,4 @@ nnoremap <leader>rn :ALERename<cr>
 nnoremap <leader>r :ALEFindReferences<cr>
 " }}}
 
+highlight ColorIndentEven ctermbg=8 guibg=#303030
