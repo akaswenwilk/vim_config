@@ -68,8 +68,6 @@ au CursorHold * checktime
 
 
 
-
-
 " Normal mappings {{{
 
 " use ev to open split of vimrc
