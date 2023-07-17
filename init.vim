@@ -217,8 +217,10 @@ augroup autosave
 augroup END
 
 function! Update()
-  silent! update
-  silent! ALELint
+  if &readonly == 0
+    silent! update
+    silent! ALELint
+  endif
 endfunction
 
 augroup quickfixOpen
