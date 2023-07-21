@@ -245,6 +245,7 @@ Plug 'junegunn/vim-easy-align', { 'for': 'cucumber' }
 Plug 'tpope/vim-fugitive'
 Plug 'fatih/vim-go', { 'for': ['go', 'cucumber'] }
 Plug 'tpope/vim-surround'
+Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -265,6 +266,9 @@ let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
 let g:ale_completion_enabled = 1
 " show hover info in popup window
 let g:ale_hover_to_floating_preview = 1
+
+" configure ale for rust
+let g:ale_linters = { 'rust': ['analyzer'] }
 " }}}
 
 
