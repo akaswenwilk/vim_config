@@ -171,8 +171,6 @@ nnoremap <leader>j :%!jq .<cr>
 " Insert Mappings {{{
 " allows changing windows with alt + movement key
 inoremap <C-h> <Esc><c-w>h
-inoremap <C-j> <Esc><c-w>j
-inoremap <C-k> <Esc><c-w>k
 inoremap <C-l> <Esc><c-w>l
 " }}}
 
@@ -265,7 +263,9 @@ let NERDTreeShowHidden=1
 let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
 
 " ale completion
-let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 0
+set omnifunc=ale#completion#OmniFunc
+inoremap <C-s> <C-x><C-o>
 " show hover info in popup window
 let g:ale_hover_to_floating_preview = 1
 
@@ -336,14 +336,18 @@ function! SmartInsertCompletion() abort
   return "\<C-c>a\<C-n>"
 endfunction
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" : "\<TAB>"
-
 nnoremap K :ALEHover<cr>
 nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
 nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
 nnoremap <leader>rn :ALERename<cr>
 nnoremap <leader>r :ALEFindReferences<cr>
+
+
+" remap copilot completions
+inoremap <C-j> <Plug>(copilot-next)
+inoremap <C-k> <Plug>(copilot-previous)
+
+let g:copilot_hide_during_completion = 1
 " }}}
 
 highlight ColorIndentEven ctermbg=8 guibg=#303030
