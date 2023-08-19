@@ -217,7 +217,6 @@ augroup END
 function! Update()
   if &readonly == 0
     silent! update
-    silent! ALELint
   endif
 endfunction
 
@@ -232,7 +231,7 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 
 " Declare the list of plugins.
 Plug 'mileszs/ack.vim'
-Plug 'dense-analysis/ale'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
@@ -262,15 +261,21 @@ let NERDTreeShowHidden=1
 " sets ack to use ripgrep
 let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
 
-" ale completion
-let g:ale_completion_enabled = 0
-set omnifunc=ale#completion#OmniFunc
-inoremap <C-s> <C-x><C-o>
-" show hover info in popup window
-let g:ale_hover_to_floating_preview = 1
+nnoremap <leader>d :vsplit<cr> <Plug>(coc-definition)
+nnoremap <leader>t :vsplit<cr> <Plug>(coc-type-definition)
+nnoremap <leader>r <Plug>(coc-references)
+nnoremap <leader>rn <Plug>(coc-rename)
 
-" configure ale for rust
-let g:ale_linters = { 'rust': ['analyzer'] }
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 " }}}
 
 
@@ -324,24 +329,6 @@ nnoremap <C-p> :FZF<cr>
 
 " toggle explore
 nnoremap <leader>nt :NERDTreeToggle<cr>
-
-" trigger ale completion with tab
-function! SmartInsertCompletion() abort
-  " Use the default CTRL-N in completion menus
-  if pumvisible()
-    return "\<C-n>"
-  endif
-
-  " Exit and re-enter insert mode, and use insert completion
-  return "\<C-c>a\<C-n>"
-endfunction
-
-nnoremap K :ALEHover<cr>
-nnoremap <leader>d :ALEGoToDefinition -vsplit<cr>
-nnoremap <leader>t :ALEGoToTypeDefinition -vsplit<cr>
-nnoremap <leader>rn :ALERename<cr>
-nnoremap <leader>r :ALEFindReferences<cr>
-
 
 " remap copilot completions
 inoremap <C-j> <Plug>(copilot-next)
