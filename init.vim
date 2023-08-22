@@ -276,6 +276,8 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+let g:rustfmt_autosave = 1
 " }}}
 
 
