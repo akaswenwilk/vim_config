@@ -259,7 +259,7 @@ set rtp+=/opt/homebrew/bin/fzf
 let NERDTreeShowHidden=1
 
 " sets ack to use ripgrep
-let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+let g:ackprg = 'rg --vimgrep --smart-case -g "!{**/.git/*}" --hidden'
 
 nnoremap <leader>d :vsplit<cr> <Plug>(coc-definition)
 nnoremap <leader>t :vsplit<cr> <Plug>(coc-type-definition)
@@ -335,8 +335,6 @@ nnoremap <leader>nt :NERDTreeToggle<cr>
 " remap copilot completions
 inoremap <C-j> <Plug>(copilot-next)
 inoremap <C-k> <Plug>(copilot-previous)
-
-let g:copilot_hide_during_completion = 1
 " }}}
 
 highlight ColorIndentEven ctermbg=8 guibg=#303030
