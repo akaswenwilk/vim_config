@@ -245,6 +245,7 @@ Plug 'tpope/vim-surround'
 Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 Plug 'powerman/vim-plugin-AnsiEsc', { 'for': ['text'] }
 Plug 'github/copilot.vim'
+Plug 'nicwest/vim-http'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
