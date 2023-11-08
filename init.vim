@@ -237,7 +237,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
 Plug 'graywh/vim-colorindent'
 Plug 'preservim/nerdcommenter'
-Plug 'preservim/nerdtree'
 Plug 'junegunn/vim-easy-align', { 'for': 'cucumber' }
 Plug 'tpope/vim-fugitive'
 Plug 'fatih/vim-go', { 'for': ['go', 'cucumber'] }
@@ -257,8 +256,13 @@ colorscheme gruvbox
 " enables fzf
 set rtp+=/opt/homebrew/bin/fzf
 
-" make hidden files showed by default in nerdtree
-let NERDTreeShowHidden=1
+" coc-explorer
+nnoremap <space>e <Cmd>CocCommand explorer --toggle<CR>
+nnoremap <space>nt <Cmd>CocCommand explorer --toggle<CR>
+augroup autoopenexplorer
+  autocmd!
+  autocmd VimEnter * :if bufname()=='' | call execute('CocCommand explorer --toggle') | endif
+augroup END
 
 " sets ack to use ripgrep
 let g:ackprg = 'rg --vimgrep --smart-case -g "!{**/.git/*}" --hidden'
@@ -330,9 +334,6 @@ endfunction
 
 " ctrl-p for fzf
 nnoremap <C-p> :FZF<cr>
-
-" toggle explore
-nnoremap <leader>nt :NERDTreeToggle<cr>
 
 " remap copilot completions
 inoremap <C-j> <Plug>(copilot-next)
