@@ -257,7 +257,7 @@ colorscheme gruvbox
 set rtp+=/opt/homebrew/bin/fzf
 
 " coc-explorer
-nnoremap <space>e <Cmd>CocCommand explorer --toggle<CR>
+nnoremap <space>er <Plug>(coc-diagnostic-next)
 nnoremap <space>nt <Cmd>CocCommand explorer --toggle<CR>
 augroup autoopenexplorer
   autocmd!
