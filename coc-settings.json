@@ -1,4 +1,14 @@
 {
+  "go.goplsOptions": {
+    "buildFlags": [
+      "-tags=integration",
+      "-tags=unit",
+      "-tags=benchmark"
+    ],
+    "env": {
+      "GO111MODULE": "on"
+    }
+  },
   "explorer.file.showHiddenFiles": true,
   "explorer.icon.enableNerdfont": true,
   "explorer.keyMappings": {
@@ -10,5 +20,10 @@
     "D": "delete",
     "ma": "addFile",
     "mA": "addDirectory"
-  }
+  },
+  "workspace.ignoredFolders": [
+    "$HOME",
+    "$HOME/.cargo/**",
+    "$HOME/.rustup/**"
+  ]
 }

@@ -246,6 +246,7 @@ Plug 'powerman/vim-plugin-AnsiEsc', { 'for': ['text'] }
 Plug 'github/copilot.vim'
 Plug 'nicwest/vim-http'
 Plug 'hashivim/vim-terraform'
+Plug 'rhysd/rust-doc.vim', { 'for': ['rust'] }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()

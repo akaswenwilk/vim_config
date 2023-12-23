@@ -6,6 +6,7 @@ let g:go_gopls_gofumpt = v:true
 
 nmap <leader>f <Plug>(go-test-func)
 nmap <leader>fs <Plug>(go-fill-struct)
+nnoremap <leader>d 
 
 nnoremap <leader>b :call GetBreakPoint()<cr>
 
