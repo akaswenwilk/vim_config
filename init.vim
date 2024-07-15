@@ -344,3 +344,15 @@ inoremap <C-k> <Plug>(copilot-previous)
 " }}}
 
 highlight ColorIndentEven ctermbg=8 guibg=#303030
+
+" Map the function to a key combination, e.g., <C-u> (Ctrl+u)
+inoremap <C-u> <C-o>:call InsertUUID()<CR>
+
+function! InsertUUID()
+  let l:uuid = tolower(system('uuidgen'))
+  " Remove the trailing newline
+  let l:uuid = substitute(l:uuid, '\n', '', '')
+  " Insert the UUID
+  execute 'normal! a' . l:uuid
+endfunction
+
