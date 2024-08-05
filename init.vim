@@ -66,6 +66,9 @@ set autoread
 au CursorHold * checktime  
 
 set foldlevel=99
+
+" make sure language is english
+language en_US
 " }}}
 
 
