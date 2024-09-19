@@ -1,4 +1,10 @@
 {
+  "languageserver.golang": {
+    "command": "gopls",
+    "filetypes": [
+      "go"
+    ]
+  },
   "go.goplsOptions": {
     "buildFlags": [
       "-tags=integration",
