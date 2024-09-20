@@ -7,9 +7,7 @@
   },
   "go.goplsOptions": {
     "buildFlags": [
-      "-tags=integration",
-      "-tags=unit",
-      "-tags=benchmark"
+      "-tags=integration,unit,functional"
     ],
     "env": {
       "GO111MODULE": "on"

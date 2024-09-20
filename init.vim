@@ -358,4 +358,3 @@ function! InsertUUID()
   " Insert the UUID
   execute 'normal! a' . l:uuid
 endfunction
-
