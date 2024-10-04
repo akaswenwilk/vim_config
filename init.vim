@@ -230,6 +230,11 @@ augroup quickfixOpen
   autocmd FileType qf nnoremap <buffer> t <C-W><Enter><C-W>T
   autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
 augroup END
+
+augroup yamlfold
+  autocmd!
+  autocmd FileType yaml setlocal foldmethod=indent
+augroup END
 " }}}
 
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
@@ -252,6 +257,8 @@ Plug 'github/copilot.vim'
 Plug 'nicwest/vim-http'
 Plug 'hashivim/vim-terraform'
 Plug 'rhysd/rust-doc.vim', { 'for': ['rust'] }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -273,7 +280,8 @@ augroup END
 " sets ack to use ripgrep
 let g:ackprg = 'rg --vimgrep --smart-case -g "!{**/.git/*}" --hidden'
 
-nnoremap <leader>d :vsplit<cr> <Plug>(coc-definition)
+nnoremap <leader>d <Plug>(coc-definition)
+nnoremap <leader>dv :vsplit<cr> <Plug>(coc-definition)
 nnoremap <leader>t :vsplit<cr> <Plug>(coc-type-definition)
 nnoremap <leader>r <Plug>(coc-references)
 nnoremap <leader>rn <Plug>(coc-rename)
