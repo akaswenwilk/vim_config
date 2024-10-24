@@ -235,6 +235,22 @@ augroup yamlfold
   autocmd!
   autocmd FileType yaml setlocal foldmethod=indent
 augroup END
+
+augroup markdownfold
+  autocmd!
+  autocmd FileType markdown setlocal foldmethod=expr
+  autocmd FileType markdown setlocal foldexpr=MarkdownFold()
+augroup END
+
+function! MarkdownFold()
+    let l:line = getline(v:lnum)
+    if empty(l:line)
+        return '='
+    elseif l:line =~ '^#'
+        return '>' . len(matchstr(l:line, '^#*'))
+    endif
+    return '='
+endfunction
 " }}}
 
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
@@ -258,6 +274,7 @@ Plug 'nicwest/vim-http'
 Plug 'hashivim/vim-terraform'
 Plug 'rhysd/rust-doc.vim', { 'for': ['rust'] }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+Plug 'nvim-treesitter/nvim-treesitter'
 
 
 " List ends here. Plugins become visible to Vim after this call.
