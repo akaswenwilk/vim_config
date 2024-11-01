@@ -5,6 +5,14 @@
       "go"
     ]
   },
+  "languageserver.terraform": {
+    "command": "terraform-ls",
+    "args": ["serve"],
+    "filetypes": [
+      "terraform",
+      "tf"
+    ]
+  },
   "go.goplsOptions": {
     "buildFlags": [
       "-tags=integration,unit,functional"
