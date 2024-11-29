@@ -4,15 +4,8 @@ set nocompatible
 " In Insert mode: Use the appropriate number of spaces to insert a <Tab>
 set expandtab 
 
-" default shift amount
-set shiftwidth=2
-set softtabstop=2
-
 " Round indent to multiple of shiftwidth
 set shiftround
-
-" re-reads file if changes occurred on disk while open in buffer
-set autoread
 
 " Use case insensitive search, except when using capital letters
 set ignorecase
@@ -61,10 +54,6 @@ set incsearch
 " sets <space> to leader key
 let mapleader = "\<Space>"
 
-" autoread when changes on files from disk
-set autoread
-au CursorHold * checktime  
-
 set foldlevel=99
 
 " make sure language is english
@@ -97,7 +86,7 @@ function! DeleteSearchMatches()
 endfunction
 
 
-" allows search with motion
+"" allows search with motion
 nnoremap <leader>/ :set operatorfunc=<SID>SearchOperator<cr>g@
 vnoremap <leader>/ :<c-u>call <SID>SearchOperator(visualmode())<cr>
 
@@ -147,9 +136,6 @@ if &diff
     nnoremap <leader>2 :diffget BASE<CR>
     nnoremap <leader>3 :diffget REMOTE<CR>
 endif
-
-" delete whitespaces
-nnoremap <leader>s :%s/\s\+$//e<CR>
 " }}}
 
 
@@ -166,9 +152,6 @@ function! CopyToClipboard()
 endfunction
 
 nnoremap <leader>p "+p
-
-" easy mapping to format json file.  requires installation of jq
-nnoremap <leader>j :%!jq .<cr>
 " }}}
 
 
@@ -225,57 +208,33 @@ function! Update()
   endif
 endfunction
 
-augroup quickfixOpen
+" autoread when changes on files from disk
+set autoread
+augroup autoread
   autocmd!
-  autocmd FileType qf nnoremap <buffer> t <C-W><Enter><C-W>T
-  autocmd FileType qf nnoremap <buffer> s <C-W><Enter><C-W>L
+  autocmd FocusGained,BufEnter * checktime
 augroup END
 
-augroup yamlfold
-  autocmd!
-  autocmd FileType yaml setlocal foldmethod=indent
-augroup END
-
-augroup markdownfold
-  autocmd!
-  autocmd FileType markdown setlocal foldmethod=expr
-  autocmd FileType markdown setlocal foldexpr=MarkdownFold()
-augroup END
-
-function! MarkdownFold()
-    let l:line = getline(v:lnum)
-    if empty(l:line)
-        return '='
-    elseif l:line =~ '^#'
-        return '>' . len(matchstr(l:line, '^#*'))
-    endif
-    return '='
-endfunction
-" }}}
-
-call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
+"" }}}
 
 " Declare the list of plugins.
+call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
+
 Plug 'mileszs/ack.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'dense-analysis/ale'
 Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
+Plug 'preservim/nerdtree'
 Plug 'graywh/vim-colorindent'
 Plug 'preservim/nerdcommenter'
-Plug 'junegunn/vim-easy-align', { 'for': 'cucumber' }
 Plug 'tpope/vim-fugitive'
-Plug 'fatih/vim-go', { 'for': ['go', 'cucumber'] }
+Plug 'fatih/vim-go', { 'for': ['go'] }
 Plug 'tpope/vim-surround'
 Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 Plug 'powerman/vim-plugin-AnsiEsc', { 'for': ['text'] }
 Plug 'github/copilot.vim'
-Plug 'nicwest/vim-http'
-Plug 'hashivim/vim-terraform'
+Plug 'hashivim/vim-terraform', { 'for': ['tf'] }
 Plug 'rhysd/rust-doc.vim', { 'for': ['rust'] }
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
-Plug 'nvim-treesitter/nvim-treesitter'
-
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -286,35 +245,26 @@ colorscheme gruvbox
 " enables fzf
 set rtp+=/opt/homebrew/bin/fzf
 
-" coc-explorer
-nnoremap <space>er <Plug>(coc-diagnostic-next)
-nnoremap <space>nt <Cmd>CocCommand explorer --toggle<CR>
+"" coc-explorer
+nnoremap <space>er <Plug>(ale_next_wrap)
+nnoremap <space>nt :NERDTreeToggle<CR>
 augroup autoopenexplorer
   autocmd!
-  autocmd VimEnter * :if bufname()=='' | call execute('CocCommand explorer --toggle') | endif
+  autocmd VimEnter * :if bufname()=='' | call execute('NERDTreeToggle') | endif
 augroup END
 
 " sets ack to use ripgrep
 let g:ackprg = 'rg --vimgrep --smart-case -g "!{**/.git/*}" --hidden'
 
-nnoremap <leader>d <Plug>(coc-definition)
-nnoremap <leader>dv :vsplit<cr> <Plug>(coc-definition)
-nnoremap <leader>t :vsplit<cr> <Plug>(coc-type-definition)
-nnoremap <leader>r <Plug>(coc-references)
-nnoremap <leader>rn <Plug>(coc-rename)
+nnoremap <leader>d <Plug>(ale_go_to_definition)
+nnoremap <leader>dv :vsplit<cr> <Plug>(ale_go_to_definition)
+nnoremap <leader>t :vsplit<cr> <Plug>(ale_go_to_type_definition)
+nnoremap <leader>i :vsplit<cr> <Plug>(go_to_implementation)
+nnoremap <leader>r :ALEFindReferences -relative<cr>
+nnoremap <leader>rn <Plug>(ale_rename)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-let g:rustfmt_autosave = 1
+nnoremap <silent> K :<Plug>(ale_hover)<CR>
 " }}}
 
 
