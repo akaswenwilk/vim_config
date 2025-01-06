@@ -130,6 +130,24 @@ nnoremap <leader><down> :resize -5<cr>
 nnoremap <leader><left> :vertical resize -5<cr>
 nnoremap <leader><right> :vertical resize +5<cr>
 
+nnoremap <silent> t :call OpenLocInTab()<CR>
+"
+function! OpenLocInTab()
+  if &l:buftype ==# 'quickfix' && getloclist(0, {'title': 0}).title != ''
+        let line = getline('.')
+        let matchlist = matchlist(line, '\v(.+)\|(\d+) col (\d+)\|')
+        let file = matchlist[1]
+        let lnum = matchlist[2]
+        let col = matchlist[3]
+        execute 'tabnew ' . fnameescape(file)
+        execute lnum
+        execute 'normal! ' . col . '|'
+  else
+        normal! t
+  endif
+endfunction
+
+
 " for vimdiff mode
 if &diff
     nnoremap <leader>1 :diffget LOCAL<CR>
@@ -245,9 +263,13 @@ colorscheme gruvbox
 " enables fzf
 set rtp+=/opt/homebrew/bin/fzf
 
-"" coc-explorer
-nnoremap <space>er <Plug>(ale_next_wrap)
-nnoremap <space>nt :NERDTreeToggle<CR>
+let g:ale_completion_enabled = 1
+
+set completeopt=menu,menuone,preview,noselect,noinsert
+
+" coc-explorer
+nnoremap <leader>er <Plug>(ale_next_wrap)
+nnoremap <leader>nt :NERDTreeToggle<CR>
 augroup autoopenexplorer
   autocmd!
   autocmd VimEnter * :if bufname()=='' | call execute('NERDTreeToggle') | endif
@@ -265,9 +287,9 @@ nnoremap <leader>rn <Plug>(ale_rename)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :<Plug>(ale_hover)<CR>
+
+let NERDTreeShowHidden = 1
 " }}}
-
-
 
 " Plugin Mappings {{{
 " global text search
