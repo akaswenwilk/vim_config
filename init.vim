@@ -208,6 +208,14 @@ function! WritePWD()
   pwd
   redir END
 endfunction
+
+cnoreabbrev ff call WriteFile()
+
+function! WriteFile()
+  redir @+>
+  echo expand('%')
+  redir END
+endfunction
 " }}}
 
 
