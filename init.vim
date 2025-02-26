@@ -149,11 +149,9 @@ endfunction
 
 
 " for vimdiff mode
-if &diff
-    nnoremap <leader>1 :diffget LOCAL<CR>
-    nnoremap <leader>2 :diffget BASE<CR>
-    nnoremap <leader>3 :diffget REMOTE<CR>
-endif
+nnoremap <leader>1 :diffget LOCAL<CR>
+nnoremap <leader>2 :diffget BASE<CR>
+nnoremap <leader>3 :diffget REMOTE<CR>
 " }}}
 
 
