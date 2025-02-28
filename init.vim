@@ -214,6 +214,12 @@ function! WriteFile()
   echo expand('%')
   redir END
 endfunction
+
+cnoreabbrev errcount call ListErrorCount()
+
+function! ListErrorCount()
+  echom ale#statusline#Count(bufnr('%'))
+endfunction
 " }}}
 
 
@@ -259,6 +265,8 @@ Plug 'powerman/vim-plugin-AnsiEsc', { 'for': ['text'] }
 Plug 'github/copilot.vim'
 Plug 'hashivim/vim-terraform', { 'for': ['tf'] }
 Plug 'rhysd/rust-doc.vim', { 'for': ['rust'] }
+Plug 'junegunn/vim-easy-align'
+Plug 'gurpreetatwal/vim-avro'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -293,6 +301,10 @@ nnoremap <leader>rn <Plug>(ale_rename)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :<Plug>(ale_hover)<CR>
+
+let g:ale_linters = {
+        \ 'avdl': ['jsonlint'],
+        \}
 
 let NERDTreeShowHidden = 1
 " }}}
