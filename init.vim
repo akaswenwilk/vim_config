@@ -220,6 +220,18 @@ cnoreabbrev errcount call ListErrorCount()
 function! ListErrorCount()
   echom ale#statusline#Count(bufnr('%'))
 endfunction
+
+" Function to diff two open buffers
+function! DiffBuffers()
+  if len(tabpagebuflist()) != 2
+    echo "Exactly two buffers must be open in the current tab."
+    return
+  endif
+  windo diffthis
+endfunction
+
+" Key binding to trigger the DiffBuffers function
+cnoreabbrev diffbuff call DiffBuffers()<CR>
 " }}}
 
 
@@ -267,6 +279,7 @@ Plug 'hashivim/vim-terraform', { 'for': ['tf'] }
 Plug 'rhysd/rust-doc.vim', { 'for': ['rust'] }
 Plug 'junegunn/vim-easy-align'
 Plug 'gurpreetatwal/vim-avro'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -307,6 +320,22 @@ let g:ale_linters = {
         \}
 
 let NERDTreeShowHidden = 1
+
+let g:NERDTreeGitStatusShowIgnored = 1
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusShowClean = 0
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+  \ 'Modified'  : '✹',
+  \ 'Staged'    : '✚',
+  \ 'Untracked' : '✭',
+  \ 'Renamed'   : '➜',
+  \ 'Unmerged'  : '═',
+  \ 'Deleted'   : '✖',
+  \ 'Dirty'     : '✗',
+  \ 'Ignored'   : '☒',
+  \ 'Clean'     : '✔︎',
+  \ 'Unknown'   : '?'
+  \ }
 " }}}
 
 " Plugin Mappings {{{
