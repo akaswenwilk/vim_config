@@ -26,4 +26,3 @@ let g:go_build_tags = "integration,functional"
 
 let g:ale_go_gopls_options = '--remote=auto'
 let g:ale_go_gopls_init_options = {'buildFlags': ['-tags', 'integration,functional']}
-
