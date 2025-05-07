@@ -24,18 +24,18 @@ keymap('v', '<leader>g', function()
   -- Call Telescope's grep_string with the escaped text
   builtin.live_grep({ default_text = text })
 end, { noremap = true, silent = true })
---keymap('n', '<leader>er', '<Plug>(ale_next_wrap)')
 
--- Copilot remaps
---keymap('i', '<C-j>', '<Plug>(copilot-next)', { silent = true })
---keymap('i', '<C-k>', '<Plug>(copilot-previous)', { silent = true })
+vim.api.nvim_create_autocmd("User", {
+  pattern = "FugitiveIndex",
+  callback = function()
+    vim.keymap.set("n", "t", function()
+      local file = vim.fn.expand("<cfile>")
+      vim.cmd("tabedit " .. file)
+    end, { buffer = true, silent = true })
 
--- Other mappings (FZF, NerdTree, etc.)
---keymap('n', '<C-p>', ':FZF<CR>')
---keymap('n', '<leader>d', '<Plug>(ale_go_to_definition)')
---keymap('n', '<leader>dv', ':vsplit<CR><Plug>(ale_go_to_definition)')
---keymap('n', '<leader>t', ':vsplit<CR><Plug>(ale_go_to_type_definition)')
---keymap('n', '<leader>i', ':vsplit<CR><Plug>(go_to_implementation)')
---keymap('n', '<leader>r', ':ALEFindReferences -relative<CR>')
---keymap('n', '<leader>rn', '<Plug>(ale_rename)')
---keymap('n', 'K', '<Plug>(ale_hover)', { silent = true })
+    vim.keymap.set("n", "v", function()
+      local file = vim.fn.expand("<cfile>")
+      vim.cmd("vsplit " .. file)
+    end, { buffer = true, silent = true })
+  end,
+})
