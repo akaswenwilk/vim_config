@@ -1,0 +1,18 @@
+-- local telescope = require('telescope')
+--
+-- telescope.setup({
+--   defaults = {
+--     layout_strategy = 'vertical',
+--     layout_config = { height = 0.9 },
+--     sorting_strategy = 'ascending',
+--     file_ignore_patterns = { ".git/", "node_modules/" },
+--   },
+-- })
+--
+-- pcall(telescope.load_extension, 'fzf')
+--
+-- local keymap = vim.keymap.set
+-- keymap('n', '<C-p>', "<cmd>Telescope find_files<cr>")
+-- keymap('n', '<leader>fg', "<cmd>Telescope live_grep<cr>")
+-- keymap('n', '<leader>fb', "<cmd>Telescope buffers<cr>")
+-- keymap('n', '<leader>fh', "<cmd>Telescope help_tags<cr>")

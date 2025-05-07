@@ -1,1 +1,1 @@
-nnoremap <leader>j :%!xmllint --format -<CR>
+"nnoremap <leader>j :%!xmllint --format -<CR>

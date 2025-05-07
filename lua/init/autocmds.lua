@@ -20,13 +20,16 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end
 })
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-  pattern = { "*.lua" },
+vim.api.nvim_create_autocmd("BufWritePre", {
+  callback = function(args)
+    vim.lsp.buf.format({ async = false, bufnr = args.buf })
+  end,
+})
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "qf",
   callback = function()
-    local file = vim.fn.expand('%')
-    if file:find(vim.fn.stdpath('config'), 1, true) then
-      vim.cmd('source ' .. file)
-      vim.notify('Reloaded ' .. file, vim.log.levels.INFO)
-    end
-  end
+    vim.keymap.set("n", "t", "<C-W><CR><C-W>T", { buffer = true, noremap = true, silent = true })
+  end,
 })
