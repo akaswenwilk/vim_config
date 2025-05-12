@@ -3,7 +3,6 @@ vim.g.maplocalleader = "\\"
 
 local opt = vim.opt
 local g = vim.g
-local api = vim.api
 
 opt.signcolumn = "yes"
 opt.clipboard = "unnamedplus"

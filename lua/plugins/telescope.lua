@@ -33,14 +33,15 @@ return {
         winblend = 0, -- fully opaque
       },
     })
-
-    -- Disable syntax highlighting in preview buffer
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "TelescopePreviewerLoaded",
-      callback = function(_)
-        vim.cmd("setlocal syntax=")
-        vim.cmd("redraw | sleep 10m")
-      end,
-    })
   end,
+  --
+  --   -- Disable syntax highlighting in preview buffer
+  --   vim.api.nvim_create_autocmd("User", {
+  --     pattern = "TelescopePreviewerLoaded",
+  --     callback = function(_)
+  --       vim.cmd("setlocal syntax=")
+  --       vim.cmd("redraw | sleep 10m")
+  --     end,
+  --   })
+  -- end,
 }

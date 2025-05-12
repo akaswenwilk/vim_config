@@ -1,9 +1,9 @@
 return {
-  { "mfussenegger/nvim-lint", enabled = false },
-  { "stevearc/conform.nvim", enabled = false },
-  "nvim-lua/plenary.nvim",
-  "MunifTanjim/nui.nvim",
-  "echasnovski/mini.icons",
+  -- { "mfussenegger/nvim-lint", enabled = false },
+  -- { "stevearc/conform.nvim", enabled = false },
+  -- "nvim-lua/plenary.nvim",
+  -- "MunifTanjim/nui.nvim",
+  -- "echasnovski/mini.icons",
   {
     "nvim-tree/nvim-web-devicons",
     opts = { default = true },
@@ -14,22 +14,38 @@ return {
     opts = {},
   },
   {
-    "folke/snacks.nvim",
-    priority = 1000,
-    event = "VeryLazy",
-    opts = {},
+    "akinsho/nvim-bufferline.lua",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      require("bufferline").setup {
+        options = {
+          numbers = "none",
+          diagnostics = "nvim_lsp",
+          separator_style = "slant" or "padded_slant",
+          show_tab_indicators = true,
+          show_buffer_close_icons = false,
+          show_close_icon = false,
+        },
+      }
+    end,
   },
-  {
-    "rcarriga/nvim-notify",
-    event = "VeryLazy",
-    enabled = true,
-    opts = {},
-  },
-  {
-    "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
-    opts = {},
-  },
+  -- {
+  --   "folke/snacks.nvim",
+  --   priority = 1000,
+  --   event = "VeryLazy",
+  --   opts = {},
+  -- },
+  -- {
+  --   "rcarriga/nvim-notify",
+  --   event = "VeryLazy",
+  --   enabled = true,
+  --   opts = {},
+  -- },
+  -- {
+  --   "sindrets/diffview.nvim",
+  --   cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+  --   opts = {},
+  -- },
   {
     "TimUntersberger/neogit",
     cmd = "Neogit",

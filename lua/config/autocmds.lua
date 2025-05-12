@@ -65,13 +65,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
-
--- auto open nvim tree on empty buffer
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    if vim.fn.bufname('') == '' then
-      vim.cmd('NvimTreeOpen')
-    end
-  end
-})
-
