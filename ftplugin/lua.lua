@@ -1,20 +1,9 @@
-local lspconfig = require('lspconfig')
+-- File: ~/.config/nvim/ftplugin/lua.lua
 
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        globals = { 'vim' },
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-})
+-- Set tab width and indentation
+vim.bo.tabstop = 2        -- Display width of a tab
+vim.bo.shiftwidth = 2     -- Indent width
+vim.bo.softtabstop = 2    -- Number of spaces per tab in insert mode
+
+-- Recommended for LSP compatibility and formatting
+vim.bo.commentstring = "-- %s"

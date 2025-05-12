@@ -1,5 +1,15 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
 local opt = vim.opt
 local g = vim.g
+local api = vim.api
+
+opt.signcolumn = "yes"
+opt.clipboard = "unnamedplus"
+opt.timeoutlen = 300
+
+g.formatoptions = "jcroqlnt"
 
 opt.compatible = false
 opt.expandtab = true
@@ -20,7 +30,6 @@ opt.hlsearch = true
 opt.incsearch = true
 opt.foldlevel = 99
 opt.autoread = true
-opt.completeopt = { "menu", "menuone", "preview", "noselect", "noinsert" }
 
 vim.cmd([[
   filetype plugin indent on
@@ -28,4 +37,3 @@ vim.cmd([[
   language en_US
 ]])
 
-g.mapleader = ' '

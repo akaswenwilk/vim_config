@@ -17,6 +17,14 @@ end, {
         nargs = '?', -- allow optional argument
 })
 
+vim.api.nvim_create_user_command('Functional', function(opts)
+        local arg = opts.args
+        local debug = (arg == "debug") or (arg == "d") or (arg == "dbg") or (arg == "Debug")
+        require('custom.go_functional_test').copy_test_cmd(debug)
+end, {
+        nargs = '?', -- allow optional argument
+})
+
 -- Breakpoint helper
 vim.api.nvim_create_user_command('GetBreakPoint', function()
         local file = vim.fn.expand('%')

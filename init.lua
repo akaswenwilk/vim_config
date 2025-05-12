@@ -1,13 +1,10 @@
--- init requirements
-require('init.settings')
-require('init.mappings')
-require('init.statusline')
+require('config.options')
+require('config.lazy')
 
--- plugin requirements
-require('plugins.plugins')
-require('plugins.settings')
-require('plugins.mappings')
-require('plugins.lsp_config')
-
-require('init.autocmds')
--- --require('telescope_setup')
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  callback = function()
+    require "config.autocmds"
+    require "config.keymaps"
+  end,
+})
