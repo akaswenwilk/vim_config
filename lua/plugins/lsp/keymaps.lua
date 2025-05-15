@@ -34,6 +34,10 @@ function M.on_attach()
 
   keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
   keymap({ "x", "n"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+  vim.api.nvim_create_user_command("Errors", function()
+    local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+    print("Error count:", #diagnostics)
+  end, {})
 end
 
 function M.diagnostic_goto(next, severity)

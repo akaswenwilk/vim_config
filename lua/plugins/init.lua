@@ -20,6 +20,14 @@ return {
     -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
   },
+  {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup {
+        current_line_blame = true,
+      }
+    end
+  },
   -- {
   --   "folke/snacks.nvim",
   --   priority = 1000,

@@ -33,15 +33,11 @@ return {
         winblend = 0, -- fully opaque
       },
     })
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "TelescopePrompt",
+      callback = function()
+        vim.keymap.set("i", "<C-u>", "<C-w>", { buffer = true, desc = "Clear Telescope input" })
+      end,
+    })
   end,
-  --
-  --   -- Disable syntax highlighting in preview buffer
-  --   vim.api.nvim_create_autocmd("User", {
-  --     pattern = "TelescopePreviewerLoaded",
-  --     callback = function(_)
-  --       vim.cmd("setlocal syntax=")
-  --       vim.cmd("redraw | sleep 10m")
-  --     end,
-  --   })
-  -- end,
 }

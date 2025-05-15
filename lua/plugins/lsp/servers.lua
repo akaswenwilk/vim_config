@@ -26,6 +26,9 @@ local servers = {
   lua_ls = {
     settings = {
       Lua = {
+        diagnostics = {
+          globals = { 'vim' },
+        },
         workspace = {
           checkThirdParty = false,
         },
@@ -35,6 +38,14 @@ local servers = {
           enable = false,
         },
       },
+    },
+  },
+  gh_actions_ls = {
+    default_config = {
+      cmd = { 'gh-actions-language-server', '--stdio' },
+      filetypes = { 'yaml.github' },
+      root_dir = require('lspconfig').util.root_pattern('.github'),
+      single_file_support = true,
     },
   },
   dockerls = {},
