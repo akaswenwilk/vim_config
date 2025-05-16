@@ -33,7 +33,7 @@ keymap("n", '<Leader>tn', ":tabn<CR>", default_opts)
 keymap("n", '<Leader>tp', ":tabp<CR>", default_opts)
 
 -- easy quit
-keymap("n", '<Leader>q', ":q!<CR>", default_opts)
+keymap("n", '<Leader>q', ":bdelete!<CR>", default_opts)
 
 -- easy buffer navigation
 keymap("n", "<C-h>", "<C-w>h", default_opts)

@@ -1,6 +1,6 @@
 local M = {}
 
-function M.copy_test_cmd(debug)
+function M.copy_test_cmd(debug, failfast)
   local api = vim.api
   local fn = vim.fn
 
@@ -38,6 +38,13 @@ function M.copy_test_cmd(debug)
   else
     cmd = "make functional-test detached=1 testcase=" .. func .. " package=" .. package_name
   end
+
+  if failfast then
+    cmd = cmd .. " ff=1"
+  else
+    cmd = cmd .. " ff=0"
+  end
+
 
   fn.setreg('+', cmd)
 end
