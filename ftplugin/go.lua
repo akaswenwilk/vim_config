@@ -3,7 +3,6 @@ local opt_local = vim.opt_local
 local keymap = vim.keymap.set
 
 -- Settings
-opt_local.foldmethod = "syntax"
 opt.shiftwidth = 8
 opt.softtabstop = 8
 

@@ -14,7 +14,7 @@ return {
         config = function()
           require("copilot").setup({
             suggestion = { enabled = true, auto_trigger = true },
-            panel       = { enabled = false },
+            panel      = { enabled = false },
           })
         end,
       },
@@ -27,8 +27,8 @@ return {
       },
     },
     config = function()
-      local cmp            = require("cmp")
-      local icons          = require("config.icons")
+      local cmp             = require("cmp")
+      local icons           = require("config.icons")
       local copilot_suggest = require("copilot.suggestion")
 
       cmp.setup {
@@ -55,6 +55,14 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
           ["<CR>"] = cmp.mapping.confirm { select = true },
+          ["<Esc>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.abort()
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+            else
+              fallback()
+            end
+          end, { "i" }),
         },
         sources = cmp.config.sources {
           { name = "copilot" },
@@ -66,10 +74,10 @@ return {
           fields = { "kind", "abbr", "menu" },
           format = function(entry, item)
             local source_names = {
-              copilot                 = "(Copilot)",
-              nvim_lsp                = "(LSP)",
-              buffer                  = "(Buf)",
-              path                    = "(Path)",
+              copilot  = "(Copilot)",
+              nvim_lsp = "(LSP)",
+              buffer   = "(Buf)",
+              path     = "(Path)",
             }
             item.kind = icons.kind[item.kind]
             item.menu = source_names[entry.source.name] or ""

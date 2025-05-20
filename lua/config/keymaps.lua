@@ -84,8 +84,12 @@ end, {
 keymap('i', '<C-u>', '<C-o>:lua require("custom.insert_uuid").insert_uuid()<CR>', default_opts)
 
 -- copy current file path into clipboard
+-- vim.api.nvim_create_user_command("File", function()
+--   local path = vim.fn.expand("%")
+--   vim.fn.setreg("+", path)
+-- end, {})
 vim.api.nvim_create_user_command("File", function()
-  local path = vim.fn.expand("%")
+  local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
   vim.fn.setreg("+", path)
 end, {})
 
@@ -99,6 +103,8 @@ vim.keymap.set({'n', 'v'}, 'd', '"ad', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v'}, 'c', '"ac', { noremap = true, silent = true })
 -- Paste from register a
 vim.keymap.set({'n', 'v'}, 'p', '"ap', { noremap = true, silent = true })
+-- Paste from register a
+vim.keymap.set({'n', 'v'}, 'P', '"aP', { noremap = true, silent = true })
 
 -- get current space
 vim.api.nvim_create_user_command("Space", function()
