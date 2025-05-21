@@ -49,6 +49,30 @@ local servers = {
     },
   },
   dockerls = {},
+  buf_ls = {
+    cmd = { "bufls", "serve" },
+    filetypes = { "proto" },
+    root_dir = require("lspconfig").util.root_pattern("buf.yaml", ".git"),
+  },
+  vimls = {
+    cmd = { "vim-language-server", "--stdio" },
+    filetypes = { "vim" },
+    root_dir = require("lspconfig").util.find_git_ancestor,
+    single_file_support = true,
+    init_options = {
+      isNeovim = true,
+      vimruntime = vim.env.VIMRUNTIME,
+      runtimepath = vim.o.runtimepath,
+      diagnostic = { enable = true },
+      indexes = {
+        runtimepath = true,
+        gap = 100,
+        count = 3,
+        projectRootPatterns = { "runtime", "nvim", ".git", "autoload", "plugin" },
+      },
+      suggest = { fromVimruntime = true, fromRuntimepath = true },
+    },
+  },
 }
 
 local function lsp_attach(on_attach)
