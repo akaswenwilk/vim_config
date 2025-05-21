@@ -23,6 +23,9 @@ end, {
   nargs = '?',
 })
 
+keymap('ca', 't', 'Test', { desc = "Test" })
+keymap('ca', 'test', 'Test', { desc = "Test" })
+
 -- Unit Test Helper
 local function parse_args(arg_str)
   local args = vim.split(arg_str or "", " ")
@@ -92,6 +95,8 @@ vim.api.nvim_create_user_command("GoDocBrowser", function()
     vim.fn.jobstart({ open_cmd, url }, { detach = true })
   end)
 end, {})
+
+keymap('ca', 'GoDoc', 'GoDocBrowser', { desc = "GoDocBrowser" })
 
 
 

@@ -84,14 +84,12 @@ end, {
 keymap('i', '<C-u>', '<C-o>:lua require("custom.insert_uuid").insert_uuid()<CR>', default_opts)
 
 -- copy current file path into clipboard
--- vim.api.nvim_create_user_command("File", function()
---   local path = vim.fn.expand("%")
---   vim.fn.setreg("+", path)
--- end, {})
 vim.api.nvim_create_user_command("File", function()
   local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
   vim.fn.setreg("+", path)
 end, {})
+keymap('ca', 'f', 'File', default_opts)
+keymap('ca', 'file', 'File', default_opts)
 
 -- use different register to not interfere with clipboard
 -- Normal + Visual mode mappings
@@ -111,5 +109,5 @@ vim.api.nvim_create_user_command("Space", function()
   local pwd = vim.fn.getcwd()
   vim.fn.setreg('+', pwd)
 end, {})
-
--- easy surround
+vim.keymap.set('ca', 's', 'Space', default_opts)
+vim.keymap.set('ca', 'space', 'Space', default_opts)

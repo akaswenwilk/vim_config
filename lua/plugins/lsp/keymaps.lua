@@ -38,6 +38,9 @@ function M.on_attach()
     local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
     print("Error count:", #diagnostics)
   end, {})
+  keymap('ca', 'e', 'Errors', { desc = "Errors" })
+  keymap('ca', 'error', 'Errors', { desc = "Errors" })
+  keymap('ca', 'errors', 'Errors', { desc = "Errors" })
 end
 
 function M.diagnostic_goto(next, severity)
