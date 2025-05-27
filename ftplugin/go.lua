@@ -23,8 +23,10 @@ end, {
   nargs = '?',
 })
 
-keymap('ca', 't', 'Test', { desc = "Test" })
-keymap('ca', 'test', 'Test', { desc = "Test" })
+local test_keys = { 't', 'te', 'T', 'TE', 'Te', 'test' }
+for _, key in ipairs(test_keys) do
+  keymap('ca', key, 'Test', { desc = "Test" })
+end
 
 -- Unit Test Helper
 local function parse_args(arg_str)
@@ -73,7 +75,7 @@ vim.api.nvim_create_user_command("GoDocBrowser", function()
   local symbol = vim.fn.expand("<cword>")
 
   vim.lsp.buf_request(0, "textDocument/hover", params, function(err, result)
-    if err then 
+    if err then
       vim.notify("GoDocBrowser: LSP request error", vim.log.levels.ERROR)
       return
     end
@@ -96,7 +98,10 @@ vim.api.nvim_create_user_command("GoDocBrowser", function()
   end)
 end, {})
 
-keymap('ca', 'GoDoc', 'GoDocBrowser', { desc = "GoDocBrowser" })
+local doc_keys = { 'd', 'doc', 'docs', 'documentation', 'GoDoc', 'godoc' }
+for _, key in ipairs(doc_keys) do
+  keymap('ca', key, 'GoDocBrowser', { desc = "GoDocBrowser" })
+end
 
 
 

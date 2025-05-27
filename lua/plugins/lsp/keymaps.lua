@@ -5,6 +5,8 @@ function M.on_attach()
   local builtin = require("telescope.builtin")
 
   keymap("n", "<leader>er", M.diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
+  keymap("n", "<leader>h", M.diagnostic_goto(true, "HINT"), { desc = "Next Error" })
+  keymap("n", "<leader>w", M.diagnostic_goto(true, "WARN"), { desc = "Next Error" })
 
   keymap("n", "gd", builtin.lsp_definitions, { desc = "Goto Definition" })
   
@@ -38,9 +40,10 @@ function M.on_attach()
     local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
     print("Error count:", #diagnostics)
   end, {})
-  keymap('ca', 'e', 'Errors', { desc = "Errors" })
-  keymap('ca', 'error', 'Errors', { desc = "Errors" })
-  keymap('ca', 'errors', 'Errors', { desc = "Errors" })
+  local errors_keys = { 'e', 'er', 'error', 'errors' }
+  for _, key in ipairs(errors_keys) do
+    keymap('ca', key, 'Errors', { desc = "Errors" })
+  end
 end
 
 function M.diagnostic_goto(next, severity)

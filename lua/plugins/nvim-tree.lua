@@ -7,7 +7,21 @@ return {
   },
   config = function()
     local icons = require("config.icons")
+    local api   = require("nvim-tree.api")
+
+    local function on_attach(bufnr)
+      api.config.mappings.default_on_attach(bufnr)  -- load defaults  [oai_citation:0‡GitHub](https://github.com/nvim-tree/nvim-tree.lua)
+
+      local function opts(desc)
+        return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+      end
+
+      vim.keymap.set('n', '<C-e>', '<C-e>', opts('Scroll window down'))
+      vim.keymap.set('n', '<C-y>', '<C-y>', opts('Scroll window up'))
+    end
+
     require("nvim-tree").setup {
+      on_attach = on_attach,
       git = {
         enable = true,
         ignore = false,
