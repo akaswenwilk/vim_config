@@ -27,7 +27,6 @@ opt.splitbelow = true
 opt.splitright = true
 opt.hlsearch = true
 opt.incsearch = true
-opt.foldlevel = 99
 opt.autoread = true
 
 vim.cmd([[
