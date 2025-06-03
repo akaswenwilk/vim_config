@@ -1,12 +1,9 @@
 return {
-  -- { "mfussenegger/nvim-lint", enabled = false },
-  -- { "stevearc/conform.nvim", enabled = false },
-  -- "nvim-lua/plenary.nvim",
-  -- "MunifTanjim/nui.nvim",
-  -- "echasnovski/mini.icons",
   {
     "nvimtools/none-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
     config = function()
       local null_ls = require("null-ls")
       null_ls.setup({
@@ -30,8 +27,6 @@ return {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
     config = true
-    -- use opts = {} for passing setup options
-    -- this is equivalent to setup({}) function
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -41,23 +36,6 @@ return {
       }
     end
   },
-  -- {
-  --   "folke/snacks.nvim",
-  --   priority = 1000,
-  --   event = "VeryLazy",
-  --   opts = {},
-  -- },
-  -- {
-  --   "rcarriga/nvim-notify",
-  --   event = "VeryLazy",
-  --   enabled = true,
-  --   opts = {},
-  -- },
-  -- {
-  --   "sindrets/diffview.nvim",
-  --   cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
-  --   opts = {},
-  -- },
   {
     "TimUntersberger/neogit",
     cmd = "Neogit",

@@ -1,6 +1,29 @@
 local M = {}
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.offsetEncoding = { "utf-16" }
+
 local servers = {
+  zls = {
+    cmd = { "zls" },
+    filetypes = { "zig" },
+    root_dir = require("lspconfig").util.root_pattern("build.zig", ".git"),
+    capabilities = capabilities,
+  },
+  rust_analyzer = {
+    settings = {
+      ["rust-analyzer"] = {
+        cargo = {
+          allFeatures = true,
+        },
+        checkOnSave = {
+          command = "clippy",
+        },
+      },
+    },
+    capabilities = capabilities,
+    root_dir = require("lspconfig").util.root_pattern("Cargo.toml", ".git"),
+  },
   gopls = {
     settings = {
       gopls = {
@@ -80,6 +103,8 @@ local function lsp_attach(on_attach)
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
+      if not client then return end  -- avoid nil access
+
       on_attach(client, bufnr)
     end,
   })
