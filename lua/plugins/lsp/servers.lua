@@ -4,10 +4,36 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.offsetEncoding = { "utf-16" }
 
 local servers = {
+  ts_ls = {
+    filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+    root_dir = require("lspconfig").util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+    capabilities = capabilities,
+  },
+  eslint = {
+    cmd = { "vscode-eslint-language-server", "--stdio" },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    root_dir = require("lspconfig").util.root_pattern(".eslintrc", ".eslintrc.js", "package.json", ".git"),
+    settings = {
+      format = true,
+    },
+    capabilities = capabilities,
+  },
   zls = {
     cmd = { "zls" },
     filetypes = { "zig" },
     root_dir = require("lspconfig").util.root_pattern("build.zig", ".git"),
+    capabilities = capabilities,
+  },
+  solargraph = {
+    cmd = { "solargraph", "stdio" },
+    filetypes = { "ruby" },
+    root_dir = require("lspconfig").util.root_pattern("Gemfile", ".git"),
+    settings = {
+      solargraph = {
+        diagnostics = true,
+        formatting = true,
+      },
+    },
     capabilities = capabilities,
   },
   rust_analyzer = {
@@ -103,7 +129,7 @@ local function lsp_attach(on_attach)
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      if not client then return end  -- avoid nil access
+      if not client then return end -- avoid nil access
 
       on_attach(client, bufnr)
     end,
