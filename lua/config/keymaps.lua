@@ -4,20 +4,12 @@ local expr_opts = { noremap = true, expr = true, silent = true }
 
 vim.g.mapleader = ' '
 
--- Visual line wraps
-keymap("n", "k", "v:count == 0 ? 'gk' : 'k'", expr_opts)
-keymap("n", "j", "v:count == 0 ? 'gj' : 'j'", expr_opts)
-
 -- Better Indent
 keymap("v", "<S-Tab>", "<gv", default_opts)
 keymap("v", "<Tab>", ">gv", default_opts)
 
 -- Paste over currently selected text without yanking it
 keymap("v", "p", '"_dP', default_opts)
-
--- Move selected line /block of text in visual mode
-keymap("x", "K", ":move '<-2<CR>gv-gv", default_opts)
-keymap("x", "J", ":move '>+1<CR>gv-gv", default_opts)
 
 -- Resizing panes
 keymap("n", "<Left>", ":vertical resize +1<CR>", default_opts)

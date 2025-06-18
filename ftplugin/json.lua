@@ -1,6 +1,7 @@
 local opt = vim.opt
-local opt_local = vim.opt_local
 local keymap = vim.keymap.set
+
+keymap('n', '<leader>j', [[:%!jq .<CR>]], { noremap = true, silent = true, desc = "Prettify JSON with jq" })
 
 -- Settings
 opt.shiftwidth = 2

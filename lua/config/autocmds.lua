@@ -8,7 +8,7 @@ vim.api.nvim_create_autocmd({"BufLeave", "InsertLeave", "CursorHold"}, {
 })
 
 -- reload if changed
-vim.api.nvim_create_autocmd({"FocusGained", "BufEnter"}, {
+vim.api.nvim_create_autocmd({"FocusGained", "BufEnter", "CursorHold", "CursorHoldI"}, {
   callback = function()
     vim.cmd('checktime')
   end

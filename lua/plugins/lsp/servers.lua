@@ -2,8 +2,20 @@ local M = {}
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.offsetEncoding = { "utf-16" }
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 local servers = {
+  jsonls = {
+    filetypes = { "json", "jsonc", "avsc" },
+    root_dir = require("lspconfig").util.root_pattern(".git", "."),
+    settings = {
+      json = {
+        validate = { enable = true },
+      },
+    },
+    capabilities = capabilities,
+  },
   ts_ls = {
     filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
     root_dir = require("lspconfig").util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
@@ -137,13 +149,35 @@ local function lsp_attach(on_attach)
 end
 
 function M.setup()
+  require("nvim-treesitter.configs").setup {
+    ensure_installed = {
+      "json", -- for .avsc, .json, .jsonc
+      "javascript",
+      "typescript",
+      "tsx", -- for React TSX
+      "zig",
+      "ruby",
+      "rust",
+      "go",
+      "lua",
+      "yaml",
+      "dockerfile",
+      "proto",
+      "vim",
+    },
+    highlight = { enable = true, additional_vim_regex_highlighting = false },
+    sync_install = false,
+    auto_install = true,
+  }
+  vim.g.polyglot_disabled = { "json" } -- disable polyglot JSON to let treesitter take over
+
+  -- existing attach logic
   lsp_attach(function(client, buffer)
     require("plugins.lsp.format").on_attach(client, buffer)
-    require("plugins.lsp.keymaps").on_attach(client, buffer)
+    require("plugins.lsp.keymaps").on_attach()
   end)
 
   local lspconfig = require("lspconfig")
-
   for server, config in pairs(servers) do
     lspconfig[server].setup(config)
   end
