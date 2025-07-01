@@ -7,7 +7,7 @@ function M.copy_test_cmd(debug, failfast)
   local function get_current_func()
     local row = api.nvim_win_get_cursor(0)[1]
     for i = row, 1, -1 do
-      local l = api.nvim_buf_get_lines(0, i-1, i, false)[1]
+      local l = api.nvim_buf_get_lines(0, i - 1, i, false)[1]
       local func = string.match(l, "^func%s+(Test[%w_]+)")
       if func then return func end
     end
@@ -30,7 +30,10 @@ function M.copy_test_cmd(debug, failfast)
     return
   end
 
-  local package_path = fn.expand('%:h')
+  local file = vim.fn.expand('%:p')
+  local cwd = vim.fn.getcwd()
+  local relpath = vim.fn.fnamemodify(file, ':.' .. cwd)
+  local package_path = vim.fn.fnamemodify(relpath, ':h')
 
   local cmd
   if debug then

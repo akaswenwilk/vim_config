@@ -28,13 +28,14 @@ opt.splitright = true
 opt.hlsearch = true
 opt.incsearch = true
 opt.autoread = true
+opt.shadafile = "NONE"
 
 vim.cmd([[
   filetype plugin indent on
-  syntax enable
+  syntax on
   language en_US
 ]])
 
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.opt.foldlevel = 99 -- Start with all folds open
+opt.foldmethod = 'expr'
+opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.foldlevel = 99 -- Start with all folds open

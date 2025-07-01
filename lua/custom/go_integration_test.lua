@@ -30,11 +30,13 @@ function M.copy_test_cmd(debug, failfast)
     return
   end
 
+  local package_name = vim.fn.fnamemodify(vim.fn.expand('%:h'), ':t')
+
   local cmd
   if debug then
-    cmd = "make debug-integration-test detached=1 testcase=" .. func
+    cmd = "make debug-integration-test detached=1 testcase=" .. func .. " package=" .. package_name
   else
-    cmd = "make integration-test detached=1 testcase=" .. func
+    cmd = "make integration-test detached=1 testcase=" .. func .. " package=" .. package_name
   end
 
   if failfast then

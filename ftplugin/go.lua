@@ -6,6 +6,27 @@ local keymap = vim.keymap.set
 opt.shiftwidth = 8
 opt.softtabstop = 8
 
+opt.foldmethod = 'syntax'
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.GoBraceFold(v:lnum)"
+
+_G.GoBraceFold = function(lnum)
+  local line = vim.fn.getline(lnum)
+  local open = select(2, line:gsub("{", ""))
+  local close = select(2, line:gsub("}", ""))
+
+  -- initialize fold level cache
+  _G.brace_fold_level = _G.brace_fold_level or {}
+  local prev = _G.brace_fold_level[lnum - 1] or 0
+
+  local level = prev + open - close
+  if level < 0 then level = 0 end
+
+  _G.brace_fold_level[lnum] = level
+  return level
+end
+
 
 vim.api.nvim_create_user_command('Test', function(opts)
   local args = vim.split(opts.args or "", " ")
@@ -63,10 +84,13 @@ end, { nargs = '*' })
 
 -- Breakpoint helper
 vim.api.nvim_create_user_command('GetBreakPoint', function()
-  local file = vim.fn.expand('%')
+  local file = vim.fn.expand('%:p')
+  local cwd = vim.fn.getcwd()
+  local relpath = vim.fn.fnamemodify(file, ':.' .. cwd)
   local line = vim.fn.line('.')
-  vim.fn.setreg('+', 'break ' .. file .. ':' .. line)
-  vim.notify('Breakpoint copied: break ' .. file .. ':' .. line)
+  local breakpoint = 'break ' .. relpath .. ':' .. line
+  vim.fn.setreg('+', breakpoint)
+  vim.notify('Breakpoint copied: ' .. breakpoint)
 end, {})
 
 -- open docs in browser
@@ -98,7 +122,7 @@ vim.api.nvim_create_user_command("GoDocBrowser", function()
   end)
 end, {})
 
-local doc_keys = { 'd', 'doc', 'docs', 'documentation', 'GoDoc', 'godoc' }
+local doc_keys = {'GoDoc', 'godoc' }
 for _, key in ipairs(doc_keys) do
   keymap('ca', key, 'GoDocBrowser', { desc = "GoDocBrowser" })
 end
