@@ -7,6 +7,7 @@ function M.on_attach()
   keymap("n", "<leader>er", M.diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
   keymap("n", "<leader>h", M.diagnostic_goto(true, "HINT"), { desc = "Next Error" })
   keymap("n", "<leader>w", M.diagnostic_goto(true, "WARN"), { desc = "Next Error" })
+  keymap("n", "<leader>o", M.diagnostic_goto(true, "INFO"), { desc = "Next Error" })
 
   keymap("n", "gd", builtin.lsp_definitions, { desc = "Goto Definition" })
   

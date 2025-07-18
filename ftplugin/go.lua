@@ -1,15 +1,12 @@
 local opt = vim.opt
-local opt_local = vim.opt_local
 local keymap = vim.keymap.set
 
 -- Settings
 opt.shiftwidth = 8
 opt.softtabstop = 8
 
-opt.foldmethod = 'syntax'
-
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.GoBraceFold(v:lnum)"
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.GoBraceFold(v:lnum)"
 
 _G.GoBraceFold = function(lnum)
   local line = vim.fn.getline(lnum)
