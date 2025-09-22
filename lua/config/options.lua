@@ -1,15 +1,13 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
-
 local opt = vim.opt
 local g = vim.g
 
+g.mapleader = " "
+g.maplocalleader = " "
+
+opt.formatoptions = "jcroqlnt"
 opt.signcolumn = "yes"
 opt.clipboard = "unnamedplus"
 opt.timeoutlen = 300
-
-g.formatoptions = "jcroqlnt"
-
 opt.compatible = false
 opt.expandtab = true
 opt.shiftround = true
@@ -29,13 +27,14 @@ opt.hlsearch = true
 opt.incsearch = true
 opt.autoread = true
 opt.shadafile = "NONE"
+opt.foldmethod = 'expr'
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99 -- Start with all folds open
+
+vim.diagnostic.enable(true)
 
 vim.cmd([[
   filetype plugin indent on
   syntax on
   language en_US
 ]])
-
-opt.foldmethod = 'expr'
-opt.foldexpr = 'nvim_treesitter#foldexpr()'
-opt.foldlevel = 99 -- Start with all folds open

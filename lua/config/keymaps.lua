@@ -1,8 +1,6 @@
-local keymap = vim.api.nvim_set_keymap
+local keymap = vim.keymap.set
 local default_opts = { noremap = true, silent = true }
 local expr_opts = { noremap = true, expr = true, silent = true }
-
-vim.g.mapleader = ' '
 
 -- Better Indent
 keymap("v", "<S-Tab>", "<gv", default_opts)
@@ -53,13 +51,13 @@ function _G.SearchOperator(type)
   require('custom.search').operator(type)
 end
 
-vim.keymap.set('n', '<leader>/', function()
+keymap('n', '<leader>/', function()
   vim.o.operatorfunc = "v:lua.SearchOperator"
   vim.api.nvim_feedkeys('g@', 'n', false)
 end, default_opts)
 
 -- VISUAL mode: search selected text
-vim.keymap.set('x', '<leader>/', function()
+keymap('x', '<leader>/', function()
   local saved_reg = vim.fn.getreg('"')
   vim.cmd('normal! y')
   local text = vim.fn.getreg('"')
@@ -88,15 +86,15 @@ end
 -- use different register to not interfere with clipboard
 -- Normal + Visual mode mappings
 -- Yank to register a
-vim.keymap.set({'n', 'v'}, 'y', '"ay', { noremap = true, silent = true })
+keymap({'n', 'v'}, 'y', '"ay', { noremap = true, silent = true })
 -- Delete to register a
-vim.keymap.set({'n', 'v'}, 'd', '"ad', { noremap = true, silent = true })
+keymap({'n', 'v'}, 'd', '"ad', { noremap = true, silent = true })
 -- cut to register a
-vim.keymap.set({'n', 'v'}, 'c', '"ac', { noremap = true, silent = true })
+keymap({'n', 'v'}, 'c', '"ac', { noremap = true, silent = true })
 -- Paste from register a
-vim.keymap.set({'n', 'v'}, 'p', '"ap', { noremap = true, silent = true })
+keymap({'n', 'v'}, 'p', '"ap', { noremap = true, silent = true })
 -- Paste from register a
-vim.keymap.set({'n', 'v'}, 'P', '"aP', { noremap = true, silent = true })
+keymap({'n', 'v'}, 'P', '"aP', { noremap = true, silent = true })
 
 -- get current space
 vim.api.nvim_create_user_command("Space", function()
@@ -107,3 +105,60 @@ local keys = {'s', 'space', 'S', 'sp', 'SP', 'Sp'}
 for _, key in ipairs(keys) do
   keymap("ca", key, "Space", default_opts)
 end
+
+-- telescope mappings
+local tb = require("telescope.builtin")
+
+keymap("n", "<C-p>",    tb.find_files, { desc = "Find Files" })
+keymap("n", "<leader>ff", tb.find_files, { desc = "Find Files" })
+keymap("n", "<leader>fr", tb.oldfiles,   { desc = "Recent" })
+keymap("n", "<leader>fb", tb.buffers,    { desc = "Buffers" })
+keymap("n", "<leader>fg", tb.git_files,  { desc = "Git Files" })
+keymap("n", "<leader>F",  tb.live_grep,  { desc = "Grep" })
+
+-- Visual: grep selection
+keymap("x", "<leader>g", function()
+  vim.cmd('normal! "zy')
+  local text = vim.fn.getreg("z")
+  text = vim.fn.escape(text, [[\/.*$^~[]])
+  require("telescope.builtin").live_grep({ default_text = text })
+end, { desc = "Grep selection" })
+
+-- Go To errors, warnings, hints, info
+keymap("n", "<leader>dd", tb.diagnostics, { desc = "Diagnostics (Workspace)" })
+keymap("n", "<leader>de", tb.diagnostics({ severity = vim.diagnostic.severity.ERROR }), { desc = "Diagnostics (Error)" })
+keymap("n", "<leader>dh", tb.diagnostics({ severity = vim.diagnostic.severity.HINT }), { desc = "Diagnostics (HINT)" })
+keymap("n", "<leader>dw", tb.diagnostics({ severity = vim.diagnostic.severity.WARN }), { desc = "Diagnostics (WARN)" })
+keymap("n", "<leader>di", tb.diagnostics({ severity = vim.diagnostic.severity.INFO }), { desc = "Diagnostics (INFO)" })
+
+-- code navigation
+keymap("n", "gd", tb.lsp_definitions, { desc = "Goto Definition" })
+
+keymap("n", "<leader>d", tb.lsp_definitions, { desc = "Goto Definition" })
+
+keymap("n", "<leader>dv", function()
+    vim.cmd("vsplit")
+    tb.lsp_definitions()
+end, { desc = "Goto Definition split" })
+
+keymap("n", "<leader>r", function()
+  tb.lsp_references({
+    show_line = false,
+    include_declaration = false,
+    jump_type = "never",
+  })
+end, { desc = "Find references (Telescope → Quickfix)" })
+
+keymap("n", "<leader>i", tb.lsp_implementations, { desc = "Goto Implementation" })
+
+keymap("n", "<leader>t", function()
+    vim.cmd("vsplit")
+    tb.lsp_type_definitions()
+end, { desc = "Goto Type Definition" })
+
+-- vim lsp specific commands
+keymap("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+
+keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+
+keymap({ "x", "n"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })

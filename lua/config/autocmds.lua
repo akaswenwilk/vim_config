@@ -14,14 +14,6 @@ vim.api.nvim_create_autocmd({"FocusGained", "BufEnter", "CursorHold", "CursorHol
   end
 })
 
--- open in new tab from quickfix
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "qf",
-  callback = function()
-    vim.keymap.set("n", "t", "<C-W><CR><C-W>T", { buffer = true, noremap = true, silent = true })
-  end,
-})
-
 -- Go to last loc when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPre", {
   pattern = "*",

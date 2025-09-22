@@ -5,26 +5,6 @@ local keymap = vim.keymap.set
 opt.shiftwidth = 8
 opt.softtabstop = 8
 
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.GoBraceFold(v:lnum)"
-
-_G.GoBraceFold = function(lnum)
-  local line = vim.fn.getline(lnum)
-  local open = select(2, line:gsub("{", ""))
-  local close = select(2, line:gsub("}", ""))
-
-  -- initialize fold level cache
-  _G.brace_fold_level = _G.brace_fold_level or {}
-  local prev = _G.brace_fold_level[lnum - 1] or 0
-
-  local level = prev + open - close
-  if level < 0 then level = 0 end
-
-  _G.brace_fold_level[lnum] = level
-  return level
-end
-
-
 vim.api.nvim_create_user_command('Test', function(opts)
   local args = vim.split(opts.args or "", " ")
   local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
