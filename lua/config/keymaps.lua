@@ -126,10 +126,18 @@ end, { desc = "Grep selection" })
 
 -- Go To errors, warnings, hints, info
 keymap("n", "<leader>dd", tb.diagnostics, { desc = "Diagnostics (Workspace)" })
-keymap("n", "<leader>de", tb.diagnostics({ severity = vim.diagnostic.severity.ERROR }), { desc = "Diagnostics (Error)" })
-keymap("n", "<leader>dh", tb.diagnostics({ severity = vim.diagnostic.severity.HINT }), { desc = "Diagnostics (HINT)" })
-keymap("n", "<leader>dw", tb.diagnostics({ severity = vim.diagnostic.severity.WARN }), { desc = "Diagnostics (WARN)" })
-keymap("n", "<leader>di", tb.diagnostics({ severity = vim.diagnostic.severity.INFO }), { desc = "Diagnostics (INFO)" })
+keymap("n", "<leader>de", function()
+  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Diagnostics (Error)" })
+keymap("n", "<leader>dh", function()
+  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.HINT })
+end, { desc = "Diagnostics (HINT)" })
+keymap("n", "<leader>dw", function()
+  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN })
+end, { desc = "Diagnostics (WARN)" })
+keymap("n", "<leader>di", function() 
+  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.INFO })
+end, { desc = "Diagnostics (INFO)" })
 
 -- code navigation
 keymap("n", "gd", tb.lsp_definitions, { desc = "Goto Definition" })

@@ -56,47 +56,52 @@ return {
   },
 
   {
-    "nvimtools/none-ls.nvim",
-    dependencies = {
-      "mason-org/mason.nvim",
-      "jay-babu/mason-null-ls.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "mason-org/mason.nvim" },
+    lazy = false,
+    opts = {
+      ensure_installed = {
+        "stylua",
+        "prettier", "eslint_d",
+        "black", "isort", "ruff",
+        "shfmt", "shellcheck",
+        "gofumpt", "golangci-lint", "golines",
+        "rubocop", "standardrb", "erb-lint",
+      },
+      auto_update = false,
+      run_on_start = true,
     },
+  },
+
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = { "mason-org/mason.nvim" },
     lazy = false,
     config = function()
-      require("mason-null-ls").setup({
-        automatic_installation = true,
-        ensure_installed = {
-          "stylua",
-          "prettier", "eslint_d",
-          "black", "isort", "ruff",
-          "shfmt", "shellcheck",
-          "gofumpt", "golangci-lint", "golines",
-          "rubocop", "standardrb", "erb-lint",
-        },
-      })
-
       local null_ls = require("null-ls")
-      local ruby_formatter = null_ls.builtins.formatting.standardrb
-      -- local ruby_formatter = null_ls.builtins.formatting.rubocop
+
+      local sources = {}
+
+      local function safe_add(getter)
+        local ok, source = pcall(getter)
+        if ok and source then
+          table.insert(sources, source)
+        end
+      end
+
+      safe_add(function() return null_ls.builtins.formatting.stylua end)
+      safe_add(function() return null_ls.builtins.formatting.prettier end)
+      safe_add(function() return null_ls.builtins.formatting.black end)
+      safe_add(function() return null_ls.builtins.formatting.isort end)
+      safe_add(function() return null_ls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2" } }) end)
+      safe_add(function() return null_ls.builtins.formatting.gofumpt end)
+      safe_add(function() return null_ls.builtins.formatting.golines end)
+      safe_add(function() return null_ls.builtins.diagnostics.golangci_lint end)
+      safe_add(function() return null_ls.builtins.diagnostics.rubocop end)
+      safe_add(function() return null_ls.builtins.diagnostics.erb_lint end)
 
       null_ls.setup({
-        sources = {
-          null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.prettier,
-          null_ls.builtins.diagnostics.eslint_d,
-          null_ls.builtins.code_actions.eslint_d,
-          null_ls.builtins.formatting.black,
-          null_ls.builtins.formatting.isort,
-          null_ls.builtins.diagnostics.ruff,
-          null_ls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2" } }),
-          null_ls.builtins.diagnostics.shellcheck,
-          null_ls.builtins.formatting.gofumpt,
-          null_ls.builtins.formatting.golines,
-          null_ls.builtins.diagnostics.golangci_lint,
-          ruby_formatter,
-          null_ls.builtins.diagnostics.rubocop,
-          null_ls.builtins.diagnostics.erb_lint,
-        },
+        sources = sources,
       })
 
       local prefer_null = {
@@ -113,7 +118,7 @@ return {
             bufnr = args.buf,
             timeout_ms = 3000,
             filter = function(client)
-              if prefer_null[ft] then return client.name == "null-ls" end
+              if prefer_null[ft] then return client.name == "none-ls" end
               return true
             end,
           })

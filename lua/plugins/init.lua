@@ -18,4 +18,8 @@ return {
       })
     end,
   },
+  {
+    "tpope/vim-fugitive",
+    cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit" }, -- lazy-load on git commands
+  }
 }
