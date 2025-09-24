@@ -173,7 +173,7 @@ keymap({ "x", "n"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action
 -- fugitive mappings
 keymap("n", "<leader>gs", "<cmd>Git<cr>", { desc = "Fugitive Git status" })
 keymap("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Fugitive Git blame" })
-keymap("n", "<leader>gp", "<cmd>Git push<cr>", { desc = "Fugitive Git blame" })
+keymap("n", "<leader>gp", "<cmd>Git push<cr>", { desc = "Fugitive Git push" })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "fugitive",
   callback = function()
