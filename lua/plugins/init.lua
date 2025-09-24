@@ -21,5 +21,19 @@ return {
   {
     "tpope/vim-fugitive",
     cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit" }, -- lazy-load on git commands
+  },
+  {
+    "mason-org/mason.nvim",
+    build = ":MasonUpdate",
+    lazy = false,
+    opts = {}
+  },
+  {
+    "mason-org/mason-lspconfig.nvim",
+    lazy = false,
+    dependencies = {
+        { "mason-org/mason.nvim", opts = {} },
+        "neovim/nvim-lspconfig",
+    },
   }
 }
