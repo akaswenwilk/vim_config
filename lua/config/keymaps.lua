@@ -1,6 +1,5 @@
 local keymap = vim.keymap.set
 local default_opts = { noremap = true, silent = true }
-local expr_opts = { noremap = true, expr = true, silent = true }
 
 -- Better Indent
 keymap("v", "<S-Tab>", "<gv", default_opts)
@@ -78,8 +77,8 @@ vim.api.nvim_create_user_command("File", function()
   local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
   vim.fn.setreg("+", path)
 end, {})
-local keys = {'f', 'file', 'F', 'fi', 'FI', 'Fi'}
-for _, key in ipairs(keys) do
+local file_keys = {'f', 'file', 'F', 'fi', 'FI', 'Fi'}
+for _, key in ipairs(file_keys) do
   keymap("ca", key, "File", default_opts)
 end
 
@@ -101,8 +100,8 @@ vim.api.nvim_create_user_command("Space", function()
   local pwd = vim.fn.getcwd()
   vim.fn.setreg('+', pwd)
 end, {})
-local keys = {'s', 'space', 'S', 'sp', 'SP', 'Sp'}
-for _, key in ipairs(keys) do
+local space_keys = {'s', 'space', 'S', 'sp', 'SP', 'Sp'}
+for _, key in ipairs(space_keys) do
   keymap("ca", key, "Space", default_opts)
 end
 
@@ -170,3 +169,14 @@ keymap("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
 keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
 
 keymap({ "x", "n"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+
+-- fugitive mappings
+keymap("n", "<leader>gs", "<cmd>Git<cr>", { desc = "Fugitive Git status" })
+keymap("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Fugitive Git blame" })
+keymap("n", "<leader>gp", "<cmd>Git push<cr>", { desc = "Fugitive Git blame" })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "fugitive",
+  callback = function()
+    vim.keymap.set("n", "<Tab>", "=", { buffer = true, remap = true, desc = "Toggle inline diff" })
+  end,
+})
