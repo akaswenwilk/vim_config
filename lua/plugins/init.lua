@@ -4,6 +4,16 @@ return {
     opts = { default = true },
   },
   {
+    "TimUntersberger/neogit",
+    cmd = "Neogit",
+    opts = {
+      integrations = { diffview = true },
+    },
+    keys = {
+      { "<leader>gs", "<cmd>Neogit kind=floating<cr>", desc = "Status" },
+    },
+  },
+  {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
     opts = {},
@@ -22,18 +32,4 @@ return {
     "tpope/vim-fugitive",
     cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit" }, -- lazy-load on git commands
   },
-  {
-    "mason-org/mason.nvim",
-    build = ":MasonUpdate",
-    lazy = false,
-    opts = {}
-  },
-  {
-    "mason-org/mason-lspconfig.nvim",
-    lazy = false,
-    dependencies = {
-        { "mason-org/mason.nvim", opts = {} },
-        "neovim/nvim-lspconfig",
-    },
-  }
 }

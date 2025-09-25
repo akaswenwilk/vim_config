@@ -33,6 +33,8 @@ opt.foldlevel = 99 -- Start with all folds open
 
 vim.diagnostic.enable(true)
 
+opt.shortmess:append("W")
+
 vim.cmd([[
   filetype plugin indent on
   syntax on

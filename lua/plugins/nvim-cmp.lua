@@ -97,9 +97,8 @@ return {
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
           -- ["<C-y>"] = require('minuet').make_cmp_map(),
           ["<Esc>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.abort()
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+            if copilot_suggest.is_visible() then
+              copilot_suggest.dismiss()
             else
               fallback()
             end
