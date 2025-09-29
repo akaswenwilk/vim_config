@@ -14,9 +14,6 @@ return {
   stylua = {
     "formatting",
   },
-  rubocop = {
-    "formatting",
-  },
   prettierd = {
     "formatting",
   },

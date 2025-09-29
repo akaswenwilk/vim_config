@@ -58,12 +58,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_user_command("W", function()
-  vim.lsp.buf.format({ async = false })
-  vim.cmd("silent write")
-end, {})
-vim.cmd.cnoreabbrev("w silent w")
-
 -- lint/format on autosave
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.lsp', {}),

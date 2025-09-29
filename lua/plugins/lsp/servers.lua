@@ -66,6 +66,7 @@ return {
         usePlaceholders = true,
         completeUnimported = true,
         staticcheck = true,
+        ["formatting.gofumpt"] = true,
         analyses = {
           unusedparams = true,
           unreachable = true,
@@ -81,6 +82,26 @@ return {
       },
     },
     capabilities = capabilities,
+    on_attach = function(client, bufnr)
+      if client.server_capabilities.codeActionProvider then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          callback = function()
+            local params = vim.lsp.util.make_range_params(nil, vim.lsp.util._get_offset_encoding(bufnr))
+            params.context = { only = { "source.organizeImports" } }
+            local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, 3000)
+            for _, res in pairs(result or {}) do
+              for _, action in pairs(res.result or {}) do
+                if action.edit then
+                  vim.lsp.util.apply_workspace_edit(action.edit, vim.lsp.util._get_offset_encoding(bufnr))
+                end
+              end
+            end
+            vim.lsp.buf.format({ bufnr = bufnr })
+          end,
+        })
+      end
+    end,
   },
   lua_ls = {
     settings = {

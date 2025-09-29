@@ -4,6 +4,21 @@ return {
     opts = { default = true },
   },
   {
+    "akinsho/bufferline.nvim",
+    version = "*",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    lazy = false,
+    opts = {
+      options = {
+        mode = "tabs",           -- show buffers, not tabs
+        numbers = "buffer_id",           -- no buffer numbers
+        diagnostics = "nvim_lsp",   -- show LSP diagnostics
+        separator_style = "slant",  -- "slant", "padded_slant", "thick", "thin"
+        always_show_bufferline = true,
+      },
+    },
+  },
+  {
     "TimUntersberger/neogit",
     cmd = "Neogit",
     opts = {
@@ -31,5 +46,9 @@ return {
   {
     "tpope/vim-fugitive",
     cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit" }, -- lazy-load on git commands
+  },
+  {
+    "MagicDuck/grug-far.nvim",
+    cmd = { "GrugFar" }, -- lazy-load on command
   },
 }
