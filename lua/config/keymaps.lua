@@ -72,16 +72,6 @@ end, {
 -- insert uuid
 keymap('i', '<C-u>', '<C-o>:lua require("custom.insert_uuid").insert_uuid()<CR>', default_opts)
 
--- copy current file path into clipboard
-vim.api.nvim_create_user_command("File", function()
-  local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
-  vim.fn.setreg("+", path)
-end, {})
-local file_keys = {'f', 'file', 'F', 'fi', 'FI', 'Fi'}
-for _, key in ipairs(file_keys) do
-  keymap("ca", key, "File", default_opts)
-end
-
 -- use different register to not interfere with clipboard
 -- Normal + Visual mode mappings
 -- Yank to register a
@@ -94,16 +84,6 @@ keymap({'n', 'v'}, 'c', '"ac', { noremap = true, silent = true })
 keymap({'n', 'v'}, 'p', '"ap', { noremap = true, silent = true })
 -- Paste from register a
 keymap({'n', 'v'}, 'P', '"aP', { noremap = true, silent = true })
-
--- get current space
-vim.api.nvim_create_user_command("Space", function()
-  local pwd = vim.fn.getcwd()
-  vim.fn.setreg('+', pwd)
-end, {})
-local space_keys = {'s', 'space', 'S', 'sp', 'SP', 'Sp'}
-for _, key in ipairs(space_keys) do
-  keymap("ca", key, "Space", default_opts)
-end
 
 -- telescope mappings
 local tb = require("telescope.builtin")
@@ -171,3 +151,8 @@ keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
 keymap({ "x", "n"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
 
 keymap("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Fugitive Git blame" })
+
+-- swap buffers
+keymap("n", "<leader>sx", function()
+  vim.cmd("windo wincmd x")
+end, { desc = "Swap buffers between splits" })
