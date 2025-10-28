@@ -8,6 +8,7 @@ return {
       for name, config in pairs(servers) do
         table.insert(server_names, name)
         vim.lsp.config(name, config)
+        vim.lsp.enable(name)
       end
 
       require("mason-lspconfig").setup({

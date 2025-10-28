@@ -33,15 +33,13 @@ return {
     root_dir = require("lspconfig").util.root_pattern("build.zig", ".git"),
     capabilities = capabilities,
   },
-  solargraph = {
-    cmd = { "solargraph", "stdio" },
+  ruby_lsp = {
+    cmd = { "ruby-lsp" },
     filetypes = { "ruby" },
     root_dir = require("lspconfig").util.root_pattern("Gemfile", ".git"),
-    settings = {
-      solargraph = {
-        diagnostics = true,
-        formatting = true,
-      },
+    init_options = {
+      formatter = "auto",
+      linters = {},
     },
     capabilities = capabilities,
   },
